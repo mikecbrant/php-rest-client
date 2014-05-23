@@ -1,7 +1,13 @@
 <?php
 
 /**
-* @desc Class to implement a basic REST client based on cURL. Support for HTTP Basic Authentication is provided. This class also allows use of HTTPS/SSL with ability to toggle SSL peer certificate validate to allow for use in "test mode" where server may not have a commericial SSL cert. Support for curl_multi_exec functions is provided to enable multiple requests to be made in parallel. Requires PHP cURL support to be enabled. Public methods with the exception of get_* methods return the instance itself for use in fluid/chained progamming style.
+* @desc Class to implement a basic REST client based on cURL.
+* Support for HTTP Basic Authentication is provided.
+* This class also allows use of HTTPS/SSL with ability to toggle SSL peer certificate validatation
+* to allow for use in "test mode" where server may not have a commericial SSL cert.
+* Support for curl_multi_exec functions is provided to enable multiple requests to be made in parallel.
+* Requires PHP cURL support to be enabled.
+* Public methods with the exception of get_* methods return the instance itself for use in fluid/chained progamming style.
 * 
 * Usage example:
 * 
