@@ -48,7 +48,7 @@ class rest_client
     protected $basic_auth_username = NULL;
 
     /**
-    * Boomerang password for HTTP Basic Auth
+    * Password for HTTP Basic Auth
     *
     * @var string
     */
