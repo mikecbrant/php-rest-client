@@ -22,10 +22,12 @@
 *   ->post('resource', [data])                              [Perform HTTP POST on passed resource reference, data can be in form allowed by curl_setopt CURLOPT_POSTFIELDS]
 *   ->put('resource', [data])                               [Perform HTTP PUT on passed resource reference, data can be in form allowed by curl_setopt CURLOPT_POSTFIELDS]
 *   ->delete('resource');                                   [Perform HTTP DELETE on passed resource reference]
+*   ->head('reasource');                                    [Perform HTTP HEAD on passed resource reference]
 * 
 * @author Mike Brant
 * @version 1 2012-03-13
 * @version 2 2012-05-04
+* @version 3 2015-01-09
 */
 
 /**
@@ -715,7 +717,7 @@ class rest_client
         $this->_curl_setup();
         $this->_set_request_url($action);
         curl_setopt($this->curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET
-        $this->_curl_exec();
+        $this->_curl_exec();F
         
         return $this;
     }
@@ -940,6 +942,61 @@ class rest_client
         $this->_set_multi_request_urls($actions);
         foreach($this->curl_multi_handle_array as $curl) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); // explicitly set the method to DELETE
+        }
+        $this->_curl_multi_exec();
+        
+        return $this;
+    }
+
+    /**
+    * Method to execute HEAD on server
+    * 
+    * @param string $action
+    * @return rest_client
+    * @throws Exception
+    */
+    public function head($action = NULL) {
+        if (!is_string($action)) {
+            throw new Exception('A non-string value was passed for action parameter - ' . __METHOD__ . ' Line ' . __LINE__);
+        }
+        $this->_curl_setup();
+        $this->_set_request_url($action);
+        curl_setopt($this->curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET
+        curl_setopt($this->curl, CURLOPT_NOBODY, true); // set as HEAD request
+        $this->_curl_exec();
+        
+        return $this;
+    }
+    
+    /**
+    * Method to perform multiple HEAD actions using curl_multi_exec. The max_handles parameter is optional and can be used to change the default maximum number of allowable multi_exec handles.
+    * 
+    * @param array $actions
+    * @param integer $max_handles
+    * @return rest_client
+    * @throws Exception
+    */
+    public function multi_head($actions = NULL, $max_handles = NULL) {
+        if (!is_array($actions)) {
+            throw new Exception('A non-array value was passed for actions parameter - ' . __METHOD__ . ' Line ' . __LINE__);
+        }
+        if (!is_null($max_handles)) {
+            $this->set_max_multi_exec_handles($max_handles);
+        }
+        
+        $handles_needed = count($actions);
+
+        // verify that the number of handles requested does not exceed the max number of handles
+        if ($handles_needed > $this->max_multi_exec_handles) {
+            throw new Exception('The number of handles requested exceeds maximum allowed number of handles - ' . __METHOD__ . ' Line ' . __LINE__); 
+        }
+        
+        // set up curl handles
+        $this->_curl_multi_setup($handles_needed);
+        $this->_set_multi_request_urls($actions);
+        foreach($this->curl_multi_handle_array as $curl) {
+            curl_setopt($curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET
+            curl_setopt($curl, CURLOPT_NOBODY, true); // set as HEAD request
         }
         $this->_curl_multi_exec();
         
