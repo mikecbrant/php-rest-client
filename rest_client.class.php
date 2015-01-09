@@ -22,7 +22,7 @@
 *   ->post('resource', [data])                              [Perform HTTP POST on passed resource reference, data can be in form allowed by curl_setopt CURLOPT_POSTFIELDS]
 *   ->put('resource', [data])                               [Perform HTTP PUT on passed resource reference, data can be in form allowed by curl_setopt CURLOPT_POSTFIELDS]
 *   ->delete('resource');                                   [Perform HTTP DELETE on passed resource reference]
-*   ->head('reasource');                                    [Perform HTTP HEAD on passed resource reference]
+*   ->head('resource');                                    [Perform HTTP HEAD on passed resource reference]
 * 
 * @author Mike Brant
 * @version 1 2012-03-13
