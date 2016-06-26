@@ -739,7 +739,7 @@ class rest_client
         $this->_curl_setup();
         $this->_set_request_url($action);
         curl_setopt($this->curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET
-        $this->_curl_exec();F
+        $this->_curl_exec();
         
         return $this;
     }
