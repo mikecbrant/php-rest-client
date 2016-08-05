@@ -391,7 +391,7 @@ class rest_client
     }
     
     /**
-    * Method to execute execute curl_multi call
+    * Method to execute curl_multi call
     * 
     * @return void
     * @throws Exception
