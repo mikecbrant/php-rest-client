@@ -568,8 +568,8 @@ class rest_client
         }
         
         // remove any http(s):// at beginning of host name
-        $https_pattern = '#https//:#i';
-        $http_pattern = '#http//:#i';
+        $https_pattern = '#https://#i';
+        $http_pattern = '#http://#i';
         if (1 === preg_match($https_pattern, $host)) {
             // this needs to be SSL request
             $this->set_use_ssl(true);
