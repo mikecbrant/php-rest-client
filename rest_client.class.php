@@ -738,6 +738,13 @@ class rest_client
         }
         $this->_curl_setup();
         $this->_set_request_url($action);
+        
+        //Some extras that do a big diff to avoid to get a blank page specially when grabing 
+        //homepage as we don't know the real file index.(htm|html|asp|php..) get http:/somedomain/
+        curl_setopt ($this->curl , CURLOPT_HEADER, 0);
+	    curl_setopt($this->curl , CURLOPT_RETURNTRANSFER, 1); 
+	    curl_setopt($this->curl , CURLOPT_FOLLOWLOCATION, 1);
+        
         curl_setopt($this->curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET
         $this->_curl_exec();
         
