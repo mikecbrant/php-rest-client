@@ -2,8 +2,8 @@
 
 This library provides classes to implement basic REST clients based on PHP's cURL extension.  Two client classes are made available:
 
-**RestClient** - a class for executing RESTful service calls using a fluent interface.
-**RestMultiClient** - a class which extends RestClient to provide curl_multi capabilities to allow for multiple REST calls to be made in parallel.
+- **RestClient** - a class for executing RESTful service calls using a fluent interface.
+- **RestMultiClient** - a class which extends RestClient to provide curl_multi capabilities to allow for multiple REST calls to be made in parallel.
 
 These classes support:
 - HTTP actions - GET, POST, PUT, DELETE, and HEAD
