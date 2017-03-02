@@ -1,4 +1,5 @@
 <?php
+
 namespace MikeBrant\RestClientLib;
 
 use RestClient;
@@ -78,9 +79,9 @@ class RestMultiClient extends RestClient
      * @param array $actions
      * @param integer $maxHandles
      * @return RestMultiClient
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     public function get(array $actions) {
         $this->validateActionArray($actions);
@@ -102,16 +103,16 @@ class RestMultiClient extends RestClient
      * @param array $actions
      * @param array $data
      * @return RestMultiClient
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     public function post(array $actions, array $data) {
         $this->validateActionArray($actions);
         $this->validateDataArray($data);
         // verify that the number of data elements matches the number of action elements
         if (count($actions) !== count($data)) {
-            throw new LengthException('The number of actions requested does not match the number of data elements provided.'); 
+            throw new \LengthException('The number of actions requested does not match the number of data elements provided.'); 
         }
         
         // set up curl handles
@@ -132,16 +133,16 @@ class RestMultiClient extends RestClient
      * @param array $actions
      * @param array $data
      * @return RestMultiClient
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     public function put(array $actions, array $data) {
         $this->validateActionArray($actions);
         $this->validateDataArray($data);
         // verify that the number of data elements matches the number of action elements
         if (count($actions) !== count($data)) {
-            throw new LengthException('The number of actions requested does not match the number of data elements provided.'); 
+            throw new \LengthException('The number of actions requested does not match the number of data elements provided.'); 
         }
         
         // set up curl handles
@@ -162,9 +163,9 @@ class RestMultiClient extends RestClient
      * @param array $actions
      * @param integer $maxHandles
      * @return RestMultiClient
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     public function delete(array $actions) {
         $this->validateActionArray($actions);
@@ -185,9 +186,9 @@ class RestMultiClient extends RestClient
      * 
      * @param array $actions
      * @return RestMultiClient
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     public function head(array $actions) {
         $this->validateActionArray($actions);
@@ -209,11 +210,11 @@ class RestMultiClient extends RestClient
      * 
      * @param integer $maxHandles
      * @return RestMultiClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setMaxHandles($maxHandles = null) {
         if (!is_integer($maxHandles) || $maxHandles <= 0) {
-            throw new InvalidArgumentException('A non-integer value was passed for max_handles parameter.');     
+            throw new \InvalidArgumentException('A non-integer value was passed for max_handles parameter.');     
         }
         $this->maxHandles = $maxHandles;
         
@@ -279,12 +280,12 @@ class RestMultiClient extends RestClient
      * 
      * @param integer $handlesNeeded
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     protected function curlSetup($handlesNeeded) {
         $multiCurl = curl_multi_init();
         if($multiCurl === false) {
-            throw new Exception('multi_curl handle failed to initialize.');
+            throw new \Exception('multi_curl handle failed to initialize.');
         }
         $this->curlMultiHandle = $multiCurl;
         
@@ -314,7 +315,7 @@ class RestMultiClient extends RestClient
      * Method to execute curl_multi call
      * 
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     protected function curlExec() {
         // start multi_exec execution
@@ -324,7 +325,7 @@ class RestMultiClient extends RestClient
         
         // see if there are any errors on the multi_exec call as a whole
         if($status !== CURLM_OK) {
-            throw new Exception('curl_multi_exec failed with status "' . $status . '"');
+            throw new \Exception('curl_multi_exec failed with status "' . $status . '"');
         }
         
         // process the results. Note there could be individual errors on specific calls
@@ -385,15 +386,15 @@ class RestMultiClient extends RestClient
      * 
      * @param array $actions
      * @return void
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     protected function validateActionArray(array $actions) {
         if(empty($actions)) {
-            throw new InvalidArgumentException('An empty array was passed for actions parameter.');
+            throw new \InvalidArgumentException('An empty array was passed for actions parameter.');
         }
         if(count($actions) > $this->maxHandles) {
-            throw new LengthException('Length of actions array exceeds maxHandles setting.');
+            throw new \LengthException('Length of actions array exceeds maxHandles setting.');
         }
         foreach($actions as $action) {
             $this->validateActionArray($action);
@@ -405,15 +406,15 @@ class RestMultiClient extends RestClient
      * 
      * @param array $data
      * @return void
-     * @throws InvalidArgumentException
-     * @throws LengthException
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
      */
     protected function validateDataArray(array $data) {
         if(empty($data)) {
-            throw new InvalidArgumentException('An empty array was passed for data parameter');
+            throw new \InvalidArgumentException('An empty array was passed for data parameter');
         }
         if(count($data) > $this->maxHandles) {
-            throw new LengthException('Length of data array exceeds maxHandles setting.');
+            throw new \LengthException('Length of data array exceeds maxHandles setting.');
         }
         foreach($data as $item) {
             $this->validateData($item);

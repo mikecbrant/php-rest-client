@@ -1,4 +1,5 @@
 <?php
+
 namespace MikeBrant\RestClientLib;
 
 /**
@@ -145,15 +146,15 @@ class RestClient
      * 
      * @param string $action
      * @return RestClient
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function get($action = null) {
         $this->validateAction($action);
         $this->curlSetup();
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_HTTPGET, true);
-        // execute call. Can throw Exception.
+        // execute call. Can throw \Exception.
         $this->curlExec();
         
         return $this;
@@ -165,8 +166,8 @@ class RestClient
      * @param mixed $action
      * @param mixed $data
      * @return RestClient
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function post($action = null, $data = null) {
         $this->validateAction($action);
@@ -175,7 +176,7 @@ class RestClient
         $this->setRequestUrl($action);
         $this->setRequestData($data);
         curl_setopt($this->curl, CURLOPT_POST, true);
-        // execute call. Can throw Exception.
+        // execute call. Can throw \Exception.
         $this->curlExec();
         
         return $this;
@@ -187,8 +188,8 @@ class RestClient
      * @param string $action
      * @param mixed $data
      * @return RestClient
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function put($action = null, $data = null) {
         $this->validateAction($action);
@@ -197,7 +198,7 @@ class RestClient
         $this->setRequestUrl($action);
         $this->setRequestData($data);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-        // execute call. Can throw Exception.
+        // execute call. Can throw \Exception.
         $this->curlExec();
         
         return $this;
@@ -208,15 +209,15 @@ class RestClient
      * 
      * @param string $action
      * @return RestClient
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function delete($action = null) {
         $this->validateAction($action);
         $this->curlSetup();
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        // execute call. Can throw Exception.
+        // execute call. Can throw \Exception.
         $this->curlExec();
         
         return $this;
@@ -227,8 +228,8 @@ class RestClient
      * 
      * @param string $action
      * @return RestClient
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function head($action = null) {
         $this->validateAction($action);
@@ -236,7 +237,7 @@ class RestClient
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
         curl_setopt($this->curl, CURLOPT_NOBODY, true);
-        // execute call. Can throw Exception.
+        // execute call. Can throw \Exception.
         $this->curlExec();
         
         return $this;
@@ -247,13 +248,13 @@ class RestClient
      * 
      * @param string $host
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setRemoteHost($host = null) {
         if(empty($host)) {
-            throw new InvalidArgumentException('Host name not provided.');
+            throw new \InvalidArgumentException('Host name not provided.');
         } else if(!is_string($host)) {
-            throw new InvalidArgumentException('Non-string host name provided.');
+            throw new \InvalidArgumentException('Non-string host name provided.');
         }
         
         // remove any http(s):// at beginning of host name
@@ -291,12 +292,15 @@ class RestClient
      * 
      * @param string $uriBase
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setUriBase($uriBase = null) {
-        if (!is_string($uriBase)) {
-            throw new InvalidArgumentException('Non-string value passed as parameter.'); 
+        if(empty($uriBase)) {
+            throw new \InvalidArgumentException('URI base not provided.');
+        } else if(!is_string($uriBase)) {
+            throw new \InvalidArgumentException('Non-string URI base provided.');
         }
+        
         // make sure we always have forward slash at beginning and end of uriBase
         $uriBase = '/' . ltrim($uriBase, '/');
         $uriBase = rtrim($uriBase, '/') . '/';
@@ -310,11 +314,11 @@ class RestClient
      * 
      * @param boolean $value
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setUseSsl($value = null) {
         if (!is_bool($value)) {
-            throw new InvalidArgumentException('Non-boolean value passed as parameter.');
+            throw new \InvalidArgumentException('Non-boolean value passed as parameter.');
         }
         $this->useSsl = $value;
         
@@ -326,11 +330,11 @@ class RestClient
      * 
      * @param boolean $value
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setUseSslTestMode($value = null) {
         if (!is_bool($value)) {
-            throw new InvalidArgumentException('Non-boolean value passed as parameter.');
+            throw new \InvalidArgumentException('Non-boolean value passed as parameter.');
         }
         $this->useSslTestMode = $value;
         
@@ -342,14 +346,14 @@ class RestClient
      * @param string $user
      * @param string $password
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setBasicAuthCredentials($user = null, $password = null) {
         if (empty($user)) {
-            throw new InvalidArgumentException('User name not provided when trying to set basic authentication credentials.');
+            throw new \InvalidArgumentException('User name not provided when trying to set basic authentication credentials.');
         }
         if (empty($password)) {
-            throw new InvalidArgumentException('Password not provided when trying to set basic authentication credentials.');
+            throw new \InvalidArgumentException('Password not provided when trying to set basic authentication credentials.');
         }
         
         $this->useBasicAuth = true;
@@ -366,9 +370,10 @@ class RestClient
      * @return RestClient
      */
     public function setHeaders(array $headers) {
-        foreach ($headers as $key=>$val) {
-            $this->headers[$key] = $val;
+        if(empty($headers)) {
+            throw new \InvalidArgumentException('Empty array passed when triyng to set headers');
         }
+        $this->headers = $headers;
         
         return $this;  
     }
@@ -378,11 +383,11 @@ class RestClient
      * 
      * @param integer $seconds
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setTimeout($seconds = null) {
         if(!is_integer($seconds) || $seconds < 0) {
-            throw new InvalidArgumentException('Non-zero integer value was not passed when trying to set timeout');
+            throw new \InvalidArgumentException('A non-negative integer value must be passed when trying to set timeout');
         }
         $this->timeout = $seconds;
         
@@ -394,11 +399,11 @@ class RestClient
      * 
      * @param boolean $follow
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setFollowRedirects($follow = null) {
-        if(!is_boolean($follow)) {
-            throw new InvalidArgumentException('Non-boolean value passed as parameter.');
+        if(!is_bool($follow)) {
+            throw new \InvalidArgumentException('Non-boolean value passed as parameter.');
         }
         $this->followRedirects = $follow;
         
@@ -410,16 +415,79 @@ class RestClient
      * 
      * @param integer $redirects
      * @return RestClient
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setMaxRedirects($redirects = null) {
         if(!is_integer($redirects) || $redirects < 0) {
-            throw new InvalidArgumentException('Non-zero integer value was not passed when trying to set max redirects.');
+            throw new \InvalidArgumentException('A non-negative integer value must be passed when trying to set max redirects.');
         }
         $this->maxRedirects = $redirects;
         $this->setFollowRedirects(true);
         
         return $this;
+    }
+    
+    /**
+     * Get remote host setting
+     * 
+     * @return string
+     */
+    public function getRemoteHost() {
+        return $this->remoteHost;
+    }
+    
+    /**
+     * Get URI Base setting
+     * 
+     * @return string
+     */
+    public function getUriBase() {
+        return $this->uriBase;
+    }
+    
+    /**
+     * Get boolean setting indicating whether SSL is to be used
+     * 
+     * @return boolean
+     */
+    public function getUseSsl() {
+        return $this->useSsl;
+    }
+    
+    /**
+     * Get boolean setting indicating whether SSL test mode is enabled
+     * 
+     * @return boolean
+     */
+    public function getUseSslTestMode() {
+        return $this->useSslTestMode;
+    }
+    
+    /**
+     * Get timeout setting
+     * 
+     * @return integer
+     */
+    public function getTimeout() {
+        return $this->timeout;
+    }
+    
+    /**
+     * Get follow redirects setting
+     * 
+     * @return boolean
+     */
+    public function getFollowRedirects() {
+        return $this->followRedirects;
+    }
+    
+    /**
+     * Get max redirects setting
+     * 
+     * @return integer
+     */
+    public function getMaxRedirects() {
+        return $this->maxRedirects;
     }
     
     /**
@@ -480,13 +548,13 @@ class RestClient
      * Method to initialize cURL handle in object
      * 
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     protected function curlSetup() {        
         // reset all request/response properties
         $this->resetRequestResponseProperties();
         
-        // initialize cURL. Throws Exception on failure.
+        // initialize cURL. Throws \Exception on failure.
         $this->curl = $this->curlInit();
     }
     
@@ -494,13 +562,13 @@ class RestClient
      * Method to initilize a cURL handle
      * 
      * @return resource
-     * @throws Exception
+     * @throws \Exception
      */
     protected function curlInit() {
         // initialize cURL
         $curl = curl_init();
         if($curl === false) {
-            throw new Exception('cURL failed to initialize.');
+            throw new \Exception('cURL failed to initialize.');
         }
         // set timeout
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
@@ -566,7 +634,7 @@ class RestClient
      * Method to execute cURL call
      * 
      * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     protected function curlExec() {
         $curl_result = curl_exec($this->curl);
@@ -574,7 +642,7 @@ class RestClient
             // our cURL call failed for some reason
             $curl_error = curl_error($this->curl);
             $this->curlTeardown();
-            throw new Exception('cURL call failed with message: "' . $curl_error. '"');
+            throw new \Exception('cURL call failed with message: "' . $curl_error. '"');
         }
         
         // set object properties for request/response
@@ -645,11 +713,11 @@ class RestClient
      * 
      * @param string $action
      * @return void
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function validateAction($action) {
         if(!is_string($action)) {
-            throw new InvalidArgumentException('A non-string value was passed for action parameter');
+            throw new \InvalidArgumentException('A non-string value was passed for action parameter');
         }
     }
     
@@ -658,11 +726,11 @@ class RestClient
      * 
      * @param mixed $data
      * @return void
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     protected function validateData($data) {
         if(empty($data)) {
-            throw new InvalidArgumentException('An empty value was passed for data parameter');
+            throw new \InvalidArgumentException('An empty value was passed for data parameter');
         }
     }
 }

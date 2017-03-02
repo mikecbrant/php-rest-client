@@ -11,8 +11,9 @@ These classes support:
 - SSL, with the ability to toggle SSL certificate validation to help in development/test enviroments
 
 Requires:
-- PHP >= 5.3.0
+- PHP 5.6+ (Likely to work in PHP 5.1+, but not tested below 5.6)
 - PHP cURL extension
+- PHPUnit 5.7+ (for unit tests only)
 
 This version represents a total re-factoring from previous versions of this library, which were getting long in the tooth and were out of compliance with more modern PHP development standards (i.e. PSR) and tools (i.e. composer).
 
