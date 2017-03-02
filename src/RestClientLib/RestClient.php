@@ -637,20 +637,20 @@ class RestClient
      * @throws \Exception
      */
     protected function curlExec() {
-        $curl_result = curl_exec($this->curl);
-        if($curl_result === false) {
+        $curlResult = curl_exec($this->curl);
+        if($curlResult === false) {
             // our cURL call failed for some reason
-            $curl_error = curl_error($this->curl);
+            $curlError = curl_error($this->curl);
             $this->curlTeardown();
-            throw new \Exception('cURL call failed with message: "' . $curl_error. '"');
+            throw new \Exception('cURL call failed with message: "' . $curlError. '"');
         }
         
         // set object properties for request/response
-        $curl_info = curl_getinfo($this->curl);
-        $this->responseInfo = $curl_info;
+        $curlInfo = curl_getinfo($this->curl);
+        $this->responseInfo = $curlInfo;
         $this->requestHeader = $this->responseInfo['request_header'];
         $this->responseCode = $this->responseInfo['http_code'];
-        $this->responseBody = $curl_result;
+        $this->responseBody = $curlResult;
         $this->curlTeardown();
     }
     
