@@ -6,3 +6,4 @@ php:
   - hhvm
   - nightly
 install: composer update
+script: vendor/bin/phpunit
