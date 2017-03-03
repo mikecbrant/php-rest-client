@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/mikecbrant/php-rest-client.svg?branch=master)](https://travis-ci.org/mikecbrant/php-rest-client)
+[![Code Climate](https://codeclimate.com/github/mikecbrant/php-rest-client/badges/gpa.svg)](https://codeclimate.com/github/mikecbrant/php-rest-client)
+[![Test Coverage](https://codeclimate.com/github/mikecbrant/php-rest-client/badges/coverage.svg)](https://codeclimate.com/github/mikecbrant/php-rest-client/coverage)
+
 # php-rest-client
 
 This library provides classes to implement basic REST clients based on PHP's cURL extension.  Two client classes are made available:
