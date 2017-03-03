@@ -81,7 +81,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function get(array $actions) {
+    public function get($actions) {
         $this->validateActionArray($actions);
         
         // set up curl handles
@@ -105,7 +105,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function post(array $actions, array $data) {
+    public function post($actions, $data) {
         $this->validateActionArray($actions);
         $this->validateDataArray($data);
         // verify that the number of data elements matches the number of action elements
@@ -135,7 +135,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function put(array $actions, array $data) {
+    public function put($actions, $data) {
         $this->validateActionArray($actions);
         $this->validateDataArray($data);
         // verify that the number of data elements matches the number of action elements
@@ -165,7 +165,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function delete(array $actions) {
+    public function delete($actions) {
         $this->validateActionArray($actions);
         
         // set up curl handles
@@ -188,7 +188,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function head(array $actions) {
+    public function head($actions) {
         $this->validateActionArray($actions);
         
         // set up curl handles
