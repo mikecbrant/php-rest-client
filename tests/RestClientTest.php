@@ -441,6 +441,7 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider buildUrlProvider
      * @covers MikeBrant\RestClientLib\RestClient::get
+     * @covers MikeBrant\RestClientLib\RestClient::validateAction
      * @covers MikeBrant\RestClientLib\RestClient::buildUrl
      * @covers MikeBrant\RestClientLib\RestClient::curlSetup
      * @covers MikeBrant\RestClientLib\RestClient::resetRequestResponseProperties
@@ -479,6 +480,7 @@ class RestClientTest extends TestCase{
     
     /**
      * @covers MikeBrant\RestClientLib\RestClient::post
+     * @covers MikeBrant\RestClientLib\RestClient::validateData
      * @covers MikeBrant\RestClientLib\RestClient::setRequestData
      */
     public function testPost() {
