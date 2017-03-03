@@ -208,7 +208,7 @@ class RestClientTest extends TestCase{
         );
     }
     
-    public function buildUriProvider() {
+    public function buildUrlProvider() {
         return array(
             array(true, 'google.com', 'base', 'action', 'https://google.com/base/action'),
             array(false, 'google.com', 'base', 'action', 'http://google.com/base/action')
@@ -439,8 +439,9 @@ class RestClientTest extends TestCase{
     }
     
     /**
-     * @dataProvider buildUriProvider
+     * @dataProvider buildUrlProvider
      * @covers MikeBrant\RestClientLib\RestClient::get
+     * @covers MikeBrant\RestClientLib\RestClient::buildUrl
      * @covers MikeBrant\RestClientLib\RestClient::curlSetup
      * @covers MikeBrant\RestClientLib\RestClient::resetRequestResponseProperties
      * @covers MikeBrant\RestClientLib\RestClient::curlInit
@@ -451,6 +452,7 @@ class RestClientTest extends TestCase{
      * @covers MikeBrant\RestClientLib\RestClient::getRequestHeader
      * @covers MikeBrant\RestClientLib\RestClient::getResponseCode
      * @covers MikeBrant\RestClientLib\RestClient::getResponseBody
+     * @covers MikeBrant\RestClientLib\RestClient::getRequestData
      * @covers MikeBrant\RestClientLib\RestClient::curlTeardown
      * @covers MikeBrant\RestClientLib\RestClient::curlClose
      */
