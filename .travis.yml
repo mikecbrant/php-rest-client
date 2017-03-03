@@ -12,7 +12,6 @@ env:
 
 install:
     - travis_retry composer update
-    - travis_retry composer install
 
 script:
     - vendor/bin/phpunit
