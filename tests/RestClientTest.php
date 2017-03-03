@@ -227,7 +227,7 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider emptyProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::validateData
+     * @covers MikeBrant\RestClientLib\RestClient::validateData
      */
     public function testValidateDataThrowsExceptions($data) {
         $this->client->post('', $data);
@@ -236,7 +236,7 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notStringAndEmptyProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setRemoteHost
+     * @covers MikeBrant\RestClientLib\RestClient::setRemoteHost
      */
     public function testSetRemoteHostThrowsExceptions($host) {
         $this->client->setRemoteHost($host);
@@ -244,8 +244,8 @@ class RestClientTest extends TestCase{
     
     /**
      * @dataProvider hostProvider
-     * @covers RestClient::setRemoteHost
-     * @covers RestClient::getRemoteHost
+     * @covers MikeBrant\RestClientLib\RestClient::setRemoteHost
+     * @covers MikeBrant\RestClientLib\RestClient::getRemoteHost
      */
     public function testSetRemoteHost($hostInput, $hostOutput, $useSslSet) {
         $this->client->setRemoteHost($hostInput);
@@ -256,7 +256,7 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notStringAndEmptyProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setUriBase
+     * @covers MikeBrant\RestClientLib\RestClient::setUriBase
      */
     public function testSetUriBaseThrowsExceptions($string) {
         $this->client->setUriBase($string);
@@ -264,8 +264,8 @@ class RestClientTest extends TestCase{
     
     /**
      * @dataProvider uriBaseProvider
-     * @covers RestClient::setUriBase
-     * @covers RestClient::getUriBase
+     * @covers MikeBrant\RestClientLib\RestClient::setUriBase
+     * @covers MikeBrant\RestClientLib\RestClient::getUriBase
      */
     public function testSetUriBase($stringInput, $stringOutput) {
         $this->client->setUriBase($stringInput);
@@ -275,15 +275,15 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notBooleanProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setUseSsl
+     * @covers MikeBrant\RestClientLib\RestClient::setUseSsl
      */
     public function testSetUseSslThrowsExceptions($boolean) {
         $this->client->setUseSsl($boolean);
     }
     
     /**
-     * @covers RestClient::setUseSsl
-     * @covers RestClient::isUsingSsl
+     * @covers MikeBrant\RestClientLib\RestClient::setUseSsl
+     * @covers MikeBrant\RestClientLib\RestClient::isUsingSsl
      */
     public function testSetUseSsl() {
         $this->client->setUseSsl(true);
@@ -295,15 +295,15 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notBooleanProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setUseSslTestMode
+     * @covers MikeBrant\RestClientLib\RestClient::setUseSslTestMode
      */
     public function testSetUseSslTestModeThrowsExceptions($boolean) {
         $this->client->setUseSslTestMode($boolean);
     }
     
     /**
-     * @covers RestClient::setUseSslTestMode
-     * @covers RestClient::isUsingSslTestMode
+     * @covers MikeBrant\RestClientLib\RestClient::setUseSslTestMode
+     * @covers MikeBrant\RestClientLib\RestClient::isUsingSslTestMode
      */
     public function testSetUseSslTestMode() {
         $this->client->setUseSslTestMode(true);
@@ -315,7 +315,7 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider emptyProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setBasicAuthCredentials
+     * @covers MikeBrant\RestClientLib\RestClient::setBasicAuthCredentials
      */
     public function testSetBasicAuthCredentialsThrowsExceptionOnEmptyUser($user) {
         $this->client->setBasicAuthCredentials($user, 'password');
@@ -324,14 +324,14 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider emptyProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setBasicAuthCredentials
+     * @covers MikeBrant\RestClientLib\RestClient::setBasicAuthCredentials
      */
     public function testSetBasicAuthCredentialsThrowsExceptionOnEmptyPassword($password) {
         $this->client->setBasicAuthCredentials('user', $password);
     }
     
     /**
-     * @covers RestClient::setBasicAuthCredentials
+     * @covers MikeBrant\RestClientLib\RestClient::setBasicAuthCredentials
      */
     public function testSetBasicAuthCredentials() {
         $this->client->setBasicAuthCredentials('user', 'password');
@@ -342,7 +342,7 @@ class RestClientTest extends TestCase{
     
     /**
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setHeaders
+     * @covers MikeBrant\RestClientLib\RestClient::setHeaders
      */
     public function testSetHeadersThrowsExceptionOnEmptyArray() {
         $this->client->setHeaders(array());
@@ -350,7 +350,7 @@ class RestClientTest extends TestCase{
     
     /**
      * @dataProvider headersProvider
-     * @covers RestClient::setHeaders
+     * @covers MikeBrant\RestClientLib\RestClient::setHeaders
      */
     public function testSetHeaders($headers) {
         $this->client->setHeaders($headers);
@@ -360,15 +360,15 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notZeroOrPositiveIntegerProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setTimeout
+     * @covers MikeBrant\RestClientLib\RestClient::setTimeout
      */
     public function testSetTimeoutThrowsExceptions($int) {
         $this->client->setTimeout($int);
     }
     
     /**
-     * @covers RestClient::setTimeout
-     * @covers RestClient::getTimeout
+     * @covers MikeBrant\RestClientLib\RestClient::setTimeout
+     * @covers MikeBrant\RestClientLib\RestClient::getTimeout
      */
     public function testSetTimeout() {
         $this->client->setTimeout(30);
@@ -380,15 +380,15 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notBooleanProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setFollowRedirects
+     * @covers MikeBrant\RestClientLib\RestClient::setFollowRedirects
      */
     public function testSetFollowRedirectsThrowsExceptions($boolean) {
         $this->client->setFollowRedirects($boolean);
     }
     
     /**
-     * @covers RestClient::setFollowRedirects
-     * @covers RestClient::isFollowingRedirects
+     * @covers MikeBrant\RestClientLib\RestClient::setFollowRedirects
+     * @covers MikeBrant\RestClientLib\RestClient::isFollowingRedirects
      */
     public function testSetFollowRedirects() {
         $this->client->setFollowRedirects(true);
@@ -400,15 +400,15 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notZeroOrPositiveIntegerProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::setMaxRedirects
+     * @covers MikeBrant\RestClientLib\RestClient::setMaxRedirects
      */
     public function testSetMaxRedirectsThrowsExceptions($int) {
         $this->client->setMaxRedirects($int);
     }
     
     /**
-     * @covers RestClient::setMaxRedirects
-     * @covers RestClient::getMaxRedirects
+     * @covers MikeBrant\RestClientLib\RestClient::setMaxRedirects
+     * @covers MikeBrant\RestClientLib\RestClient::getMaxRedirects
      */
     public function testSetMaxRedirects() {
         $this->client->setMaxRedirects(1);
@@ -421,7 +421,7 @@ class RestClientTest extends TestCase{
     
     /**
      * @expectedException \Exception
-     * @covers RestClient::curlInit
+     * @covers MikeBrant\RestClientLib\RestClient::curlInit
      */
     public function testCurlInitThrowsException() {
         self::$curlInitResponse = false;
@@ -430,7 +430,7 @@ class RestClientTest extends TestCase{
     
     /**
      * @expectedException \Exception
-     * @covers RestClient::curlExec
+     * @covers MikeBrant\RestClientLib\RestClient::curlExec
      */
     public function testCurlExecThrowsException() {
         self::$curlExecResponse = false;
@@ -440,19 +440,19 @@ class RestClientTest extends TestCase{
     
     /**
      * @dataProvider buildUriProvider
-     * @covers RestClient::get
-     * @covers REstClient::curlSetup
-     * @covers RestClient::resetRequestResponseProperties
-     * @covers RestClient::curlInit
-     * @covers RestClient::setRequestUrl
-     * @covers RestClient::curlExec
-     * @covers RestClient::getRequestUrl
-     * @covers RestClient::getResponse
-     * @covers RestClient::getRequestHeader
-     * @covers RestClient::getResponseCode
-     * @covers RestClient::getResponseBody
-     * @covers RestClient::curlTeardown
-     * @covers REstClient::curlClose
+     * @covers MikeBrant\RestClientLib\RestClient::get
+     * @covers MikeBrant\RestClientLib\RestClient::curlSetup
+     * @covers MikeBrant\RestClientLib\RestClient::resetRequestResponseProperties
+     * @covers MikeBrant\RestClientLib\RestClient::curlInit
+     * @covers MikeBrant\RestClientLib\RestClient::setRequestUrl
+     * @covers MikeBrant\RestClientLib\RestClient::curlExec
+     * @covers MikeBrant\RestClientLib\RestClient::getRequestUrl
+     * @covers MikeBrant\RestClientLib\RestClient::getResponse
+     * @covers MikeBrant\RestClientLib\RestClient::getRequestHeader
+     * @covers MikeBrant\RestClientLib\RestClient::getResponseCode
+     * @covers MikeBrant\RestClientLib\RestClient::getResponseBody
+     * @covers MikeBrant\RestClientLib\RestClient::curlTeardown
+     * @covers MikeBrant\RestClientLib\RestClient::curlClose
      */
     public function testGet($useSsl, $host, $uriBase, $action, $expectedUrl) {
         self::$curlExecResponse = $this->curlExecMockResponse;
@@ -476,8 +476,8 @@ class RestClientTest extends TestCase{
     }
     
     /**
-     * @covers RestClient::post
-     * @covers RestClient::setRequestData
+     * @covers MikeBrant\RestClientLib\RestClient::post
+     * @covers MikeBrant\RestClientLib\RestClient::setRequestData
      */
     public function testPost() {
         self::$curlExecResponse = $this->curlExecMockResponse;
@@ -492,7 +492,7 @@ class RestClientTest extends TestCase{
    }
     
     /**
-     * @covers RestClient::put
+     * @covers MikeBrant\RestClientLib\RestClient::put
      */
     public function testPut() {
         self::$curlExecResponse = $this->curlExecMockResponse;
@@ -507,7 +507,7 @@ class RestClientTest extends TestCase{
     }
     
     /**
-     * @covers RestClient::delete
+     * @covers MikeBrant\RestClientLib\RestClient::delete
      */
     public function testDelete() {
         self::$curlExecResponse = $this->curlExecMockResponse;
@@ -521,7 +521,7 @@ class RestClientTest extends TestCase{
     }
     
         /**
-     * @covers RestClient::head
+     * @covers MikeBrant\RestClientLib\RestClient::head
      */
     public function testHead() {
         self::$curlExecResponse = '';
