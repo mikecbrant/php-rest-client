@@ -646,8 +646,7 @@ class RestClient
         }
         
         // set object properties for request/response
-        $curlInfo = curl_getinfo($this->curl);
-        $this->responseInfo = $curlInfo;
+        $this->responseInfo = curl_getinfo($this->curl);
         $this->requestHeader = $this->responseInfo['request_header'];
         $this->responseCode = $this->responseInfo['http_code'];
         $this->responseBody = $curlResult;
