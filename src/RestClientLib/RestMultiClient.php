@@ -85,12 +85,12 @@ class RestMultiClient extends RestClient
         $this->validateActionArray($actions);
         
         // set up curl handles
-        $this->curlSetup(count($actions));
+        $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET    
         }
-        $this->curlExec();
+        $this->curlMultiExec();
         
         return $this;
     }
@@ -114,13 +114,13 @@ class RestMultiClient extends RestClient
         }
         
         // set up curl handles
-        $this->curlSetup(count($actions));
+        $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         $this->setRequestDataArray($data);
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_POST, true); // explicitly set the method to POST 
         }
-        $this->curlExec();
+        $this->curlMultiExec();
         
         return $this;
     }
@@ -144,13 +144,13 @@ class RestMultiClient extends RestClient
         }
         
         // set up curl handles
-        $this->curlSetup(count($actions));
+        $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         $this->setRequestDataArray($data);
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT'); // explicitly set the method to PUT 
         }
-        $this->curlExec();
+        $this->curlMultiExec();
         
         return $this;
     }
@@ -169,12 +169,12 @@ class RestMultiClient extends RestClient
         $this->validateActionArray($actions);
         
         // set up curl handles
-        $this->curlSetup(count($actions));
+        $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); // explicitly set the method to DELETE
         }
-        $this->curlExec();
+        $this->curlMultiExec();
         
         return $this;
     }
@@ -192,13 +192,13 @@ class RestMultiClient extends RestClient
         $this->validateActionArray($actions);
         
         // set up curl handles
-        $this->curlSetup(count($actions));
+        $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         foreach($this->curlHandles as $curl) {
             curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
             curl_setopt($curl, CURLOPT_NOBODY, true);
         }
-        $this->curlExec();
+        $this->curlMultiExec();
         
         return $this;
     }
@@ -210,7 +210,7 @@ class RestMultiClient extends RestClient
      * @return RestMultiClient
      * @throws \InvalidArgumentException
      */
-    public function setMaxHandles($maxHandles = null) {
+    public function setMaxHandles($maxHandles) {
         if (!is_integer($maxHandles) || $maxHandles <= 0) {
             throw new \InvalidArgumentException('A non-integer value was passed for max_handles parameter.');     
         }
@@ -280,7 +280,7 @@ class RestMultiClient extends RestClient
      * @return void
      * @throws \Exception
      */
-    protected function curlSetup($handlesNeeded) {
+    private function curlMultiSetup($handlesNeeded) {
         $multiCurl = curl_multi_init();
         if($multiCurl === false) {
             throw new \Exception('multi_curl handle failed to initialize.');
@@ -299,7 +299,7 @@ class RestMultiClient extends RestClient
      * 
      * @return void
      */
-    protected function curlTeardown() {
+    private function curlMultiTeardown() {
         foreach ($this->curlHandles as $curl) {
             curl_multi_remove_handle($this->curlMultiHandle, $curl);
             $this->curlClose($curl);
@@ -315,7 +315,7 @@ class RestMultiClient extends RestClient
      * @return void
      * @throws \Exception
      */
-    protected function curlExec() {
+    private function curlMultiExec() {
         // start multi_exec execution
         do {
             $status = curl_multi_exec($this->curlMultiHandle, $active);
@@ -334,7 +334,7 @@ class RestMultiClient extends RestClient
             $this->responseCodes[$i] = $this->responseInfoArray[$i]['http_code'];
             $this->responseBodies[$i] = curl_multi_getcontent($curl);
         }
-        $this->curlTeardown();
+        $this->curlMultiTeardown();
     }
     
     /**
@@ -357,7 +357,7 @@ class RestMultiClient extends RestClient
      * @param array $actions
      * @return void
      */
-    protected function setRequestUrls(array $actions) {
+    private function setRequestUrls(array $actions) {
         for ($i = 0; $i < count($actions); $i++) {
             $url = $this->buildUrl($actions[$i]);
             $this->requestUrls[$i] = $url;
@@ -371,7 +371,7 @@ class RestMultiClient extends RestClient
      * @param array $data
      * @return void
      */
-    protected function setRequestDataArray(array $data) {
+    private function setRequestDataArray(array $data) {
         for ($i = 0; $i < count($data); $i++) {
             $data = $data[$i];
             $this->requestDataArray[$i] = $data;
@@ -387,7 +387,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    protected function validateActionArray(array $actions) {
+    private function validateActionArray(array $actions) {
         if(empty($actions)) {
             throw new \InvalidArgumentException('An empty array was passed for actions parameter.');
         }
@@ -407,7 +407,7 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    protected function validateDataArray(array $data) {
+    private function validateDataArray(array $data) {
         if(empty($data)) {
             throw new \InvalidArgumentException('An empty array was passed for data parameter');
         }
