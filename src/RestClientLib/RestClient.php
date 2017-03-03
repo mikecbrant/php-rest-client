@@ -550,7 +550,7 @@ class RestClient
      * @return void
      * @throws \Exception
      */
-    protected function curlSetup() {        
+    private function curlSetup() {        
         // reset all request/response properties
         $this->resetRequestResponseProperties();
         
@@ -564,7 +564,7 @@ class RestClient
      * @return resource
      * @throws \Exception
      */
-    protected function curlInit() {
+    private function curlInit() {
         // initialize curl
         $curl = curl_init();
         if($curl === false) {
@@ -616,7 +616,7 @@ class RestClient
      * 
      * @return void
      */
-    protected function curlTeardown() {
+    private function curlTeardown() {
         $this->curlClose($this->curl);
         $this->curl = null;
     }
@@ -626,7 +626,7 @@ class RestClient
      * 
      * @return void
      */
-    protected function curlClose($curl) {
+    private function curlClose($curl) {
         curl_close($curl);
     }
     
@@ -636,7 +636,7 @@ class RestClient
      * @return void
      * @throws \Exception
      */
-    protected function curlExec() {
+    private function curlExec() {
         $curl_result = curl_exec($this->curl);
         if($curl_result === false) {
             // our curl call failed for some reason
