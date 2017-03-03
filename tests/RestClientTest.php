@@ -253,7 +253,7 @@ class RestClientTest extends TestCase{
     public function testSetRemoteHost($hostInput, $hostOutput, $useSslSet) {
         $this->client->setRemoteHost($hostInput);
         $this->assertEquals($hostOutput, $this->client->getRemoteHost());
-        $this->assertEquals($useSslSet, $this->client->getUseSsl());
+        $this->assertEquals($useSslSet, $this->client->isUsingSsl());
     }
     
     /**
@@ -286,13 +286,13 @@ class RestClientTest extends TestCase{
     
     /**
      * @covers RestClient::setUseSsl
-     * @covers RestClient::getUseSsl
+     * @covers RestClient::isUsingSsl
      */
     public function testSetUseSsl() {
         $this->client->setUseSsl(true);
-        $this->assertTrue($this->client->getUseSsl());
+        $this->assertTrue($this->client->isUsingSsl());
         $this->client->setUseSsl(false);
-        $this->assertFalse($this->client->getUseSsl());
+        $this->assertFalse($this->client->isUsingSsl());
     }
     
     /**
@@ -306,13 +306,13 @@ class RestClientTest extends TestCase{
     
     /**
      * @covers RestClient::setUseSslTestMode
-     * @covers RestClient::getUseSslTestMode
+     * @covers RestClient::isUsingSslTestMode
      */
     public function testSetUseSslTestMode() {
         $this->client->setUseSslTestMode(true);
-        $this->assertTrue($this->client->getUseSslTestMode());
+        $this->assertTrue($this->client->isUsingSslTestMode());
         $this->client->setUseSslTestMode(false);
-        $this->assertFalse($this->client->getUseSslTestMode());
+        $this->assertFalse($this->client->isUsingSslTestMode());
     }
     
     /**
@@ -391,13 +391,13 @@ class RestClientTest extends TestCase{
     
     /**
      * @covers RestClient::setFollowRedirects
-     * @covers RestClient::getFollowRedirects
+     * @covers RestClient::isFollowingRedirects
      */
     public function testSetFollowRedirects() {
         $this->client->setFollowRedirects(true);
-        $this->assertTrue($this->client->getFollowRedirects());
+        $this->assertTrue($this->client->isFollowingRedirects());
         $this->client->setFollowRedirects(false);
-        $this->assertFalse($this->client->getFollowRedirects());
+        $this->assertFalse($this->client->isFollowingRedirects());
     }
     
     /**
@@ -416,10 +416,10 @@ class RestClientTest extends TestCase{
     public function testSetMaxRedirects() {
         $this->client->setMaxRedirects(1);
         $this->assertEquals(1, $this->client->getMaxRedirects());
-        $this->assertTrue($this->client->getFollowRedirects());
+        $this->assertTrue($this->client->isFollowingRedirects());
         $this->client->setMaxRedirects(0);
         $this->assertEquals(0, $this->client->getMaxRedirects());
-        $this->assertTrue($this->client->getFollowRedirects());
+        $this->assertTrue($this->client->isFollowingRedirects());
     }
     
     /**

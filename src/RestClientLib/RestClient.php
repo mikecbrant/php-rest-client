@@ -43,7 +43,7 @@ class RestClient
     protected $useSslTestMode = false;
     
     /**
-     * Integer value representing number of seconds to set for cURL timeout option. Defaults to 30 seconds.
+     * Integer value representing number of seconds to set for curl timeout option. Defaults to 30 seconds.
      * 
      * @var integer
      */
@@ -121,14 +121,14 @@ class RestClient
     private $responseCode = null;
     
     /**
-     * Variable to store cURL response info array
+     * Variable to store curl response info array
      * 
      * @var array
      */
     private $responseInfo = null;
     
     /**
-     * Variable to store cURL reponse body
+     * Variable to store curl reponse body
      * 
      * @var string
      */
@@ -379,7 +379,7 @@ class RestClient
     }
     
     /**
-     * Sets maximum timeout for cURL requests
+     * Sets maximum timeout for curl requests
      * 
      * @param integer $seconds
      * @return RestClient
@@ -450,7 +450,7 @@ class RestClient
      * 
      * @return boolean
      */
-    public function getUseSsl() {
+    public function isUsingSsl() {
         return $this->useSsl;
     }
     
@@ -459,7 +459,7 @@ class RestClient
      * 
      * @return boolean
      */
-    public function getUseSslTestMode() {
+    public function isUsingSslTestMode() {
         return $this->useSslTestMode;
     }
     
@@ -477,7 +477,7 @@ class RestClient
      * 
      * @return boolean
      */
-    public function getFollowRedirects() {
+    public function isFollowingRedirects() {
         return $this->followRedirects;
     }
     
@@ -527,7 +527,7 @@ class RestClient
     }
     
     /**
-     * Returns cURL response information array from last request
+     * Returns curl response information array from last request
      * 
      * @return array
      */
@@ -545,7 +545,7 @@ class RestClient
     }
     
     /**
-     * Method to initialize cURL handle in object
+     * Method to initialize curl handle in object
      * 
      * @return void
      * @throws \Exception
@@ -554,21 +554,21 @@ class RestClient
         // reset all request/response properties
         $this->resetRequestResponseProperties();
         
-        // initialize cURL. Throws \Exception on failure.
+        // initialize curl. Throws \Exception on failure.
         $this->curl = $this->curlInit();
     }
     
     /**
-     * Method to initilize a cURL handle
+     * Method to initilize a curl handle
      * 
      * @return resource
      * @throws \Exception
      */
     protected function curlInit() {
-        // initialize cURL
+        // initialize curl
         $curl = curl_init();
         if($curl === false) {
-            throw new \Exception('cURL failed to initialize.');
+            throw new \Exception('curl failed to initialize.');
         }
         // set timeout
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
@@ -612,7 +612,7 @@ class RestClient
     }
     
     /**
-     * Method to reset curl handle
+     * Method to to teardown curl fixtures at end of request
      * 
      * @return void
      */
@@ -622,7 +622,7 @@ class RestClient
     }
     
     /**
-     * Method to close cURL handle
+     * Method to close curl handle
      * 
      * @return void
      */
@@ -631,7 +631,7 @@ class RestClient
     }
     
     /**
-     * Method to execute cURL call
+     * Method to execute curl call
      * 
      * @return void
      * @throws \Exception
@@ -639,10 +639,10 @@ class RestClient
     protected function curlExec() {
         $curl_result = curl_exec($this->curl);
         if($curl_result === false) {
-            // our cURL call failed for some reason
+            // our curl call failed for some reason
             $curl_error = curl_error($this->curl);
             $this->curlTeardown();
-            throw new \Exception('cURL call failed with message: "' . $curl_error. '"');
+            throw new \Exception('curl call failed with message: "' . $curl_error. '"');
         }
         
         // set object properties for request/response
@@ -669,7 +669,7 @@ class RestClient
     }
     
     /**
-     * Method to set the url for request
+     * Method to set the url on curl handle based on passed action
      * 
      * @param string $action
      * @return void
@@ -681,7 +681,7 @@ class RestClient
     }
     
     /**
-     * Method to set a URL on a cURL handle.
+     * Method to build URL based on class settings and passed action
      * 
      * @param string $action
      * @return string
