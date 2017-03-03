@@ -328,8 +328,7 @@ class RestMultiClient extends RestClient
         
         // process the results. Note there could be individual errors on specific calls
         foreach($this->curlHandles as $i => $curl) {
-            $curl_info = curl_getinfo($curl);
-            $this->responseInfoArray[$i] = $curl_info;
+            $this->responseInfoArray[$i] = curl_getinfo($curl);
             $this->requestHeaders[$i] = $this->responseInfoArray[$i]['request_header'];
             $this->responseCodes[$i] = $this->responseInfoArray[$i]['http_code'];
             $this->responseBodies[$i] = curl_multi_getcontent($curl);
