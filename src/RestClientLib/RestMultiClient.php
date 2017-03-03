@@ -2,8 +2,6 @@
 
 namespace MikeBrant\RestClientLib;
 
-use RestClient;
-
 /**
 * @desc Class which extends RestClient to provide curl_multi capabilities to allow for multiple REST calls to be made in parallel.
 */
