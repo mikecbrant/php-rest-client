@@ -11,6 +11,7 @@ env:
     - CODECLIMATE_REPO_TOKEN=d695b3acdccb0187576d02ef25b63e39fa0ae091a48f26642be5e9495759f33c
 
 install:
+    - travis_retry composer update
     - travis_retry composer install
 
 script:
