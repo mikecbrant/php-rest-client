@@ -53,9 +53,6 @@ function curl_getinfo($curl) {
     return \curl_getinfo($curl);
 }
 
-/**
- * @covers RestClient
- */
 class RestClientTest extends TestCase{
     protected $client = null;
     
@@ -221,7 +218,7 @@ class RestClientTest extends TestCase{
     /**
      * @dataProvider notStringProvider
      * @expectedException \InvalidArgumentException
-     * @covers RestClient::validateAction
+     * @covers MikeBrant\RestClientLib\RestClient::validateAction
      */
     public function testValidateActionThrowsExceptions($action) {
         $this->client->get($action);
