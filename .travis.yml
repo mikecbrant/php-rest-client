@@ -1,11 +1,15 @@
 language: php
+
 php:
-  - '5.6'
-  - '7.0'
-  - '7.1'
-  - hhvm
-  - nightly
-install: composer update
+    - '5.6'
+    - '7.0'
+    - '7.1'
+    - hhvm
+    - nightly
+
+install:
+    - travis_retry composer install
+
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 
