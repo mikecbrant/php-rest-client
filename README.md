@@ -22,6 +22,8 @@ Tested via Travis CI against:
 - PHP Nightly build
 - PHP HHVM (HipHop)
 
+Please see https://travis-ci.org/mikecbrant/php-rest-client for build status.
+
 This version represents a total re-factoring from previous versions of this library, which were getting long in the tooth and were out of compliance with more modern PHP development standards (i.e. PSR) and tools (i.e. composer).
 
 **Usage example:**
