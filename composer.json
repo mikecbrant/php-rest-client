@@ -27,7 +27,6 @@
     "require-dev": {
         "phpunit/phpunit": ">=5.7",
         "phpunit/php-code-coverage": "*",
-        "ext-xdebug": "*",
         "codeclimate/php-test-reporter": "dev-master"
     },
     "autoload": {
