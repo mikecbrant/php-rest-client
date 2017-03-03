@@ -447,7 +447,7 @@ class RestClientTest extends TestCase{
      * @covers MikeBrant\RestClientLib\RestClient::setRequestUrl
      * @covers MikeBrant\RestClientLib\RestClient::curlExec
      * @covers MikeBrant\RestClientLib\RestClient::getRequestUrl
-     * @covers MikeBrant\RestClientLib\RestClient::getResponse
+     * @covers MikeBrant\RestClientLib\RestClient::getResponseInfo
      * @covers MikeBrant\RestClientLib\RestClient::getRequestHeader
      * @covers MikeBrant\RestClientLib\RestClient::getResponseCode
      * @covers MikeBrant\RestClientLib\RestClient::getResponseBody
