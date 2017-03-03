@@ -687,12 +687,10 @@ class RestClient
      * @return string
      */
     protected function buildUrl($action) {
+        $url = 'http://';
         if (true === $this->useSsl) {
             $url = 'https://';
-        } else {
-            $url = 'http://';
         }
-        
         $url = $url . $this->remoteHost . $this->uriBase . $action;
         return $url;
     }
