@@ -2,7 +2,6 @@
 
 namespace MikeBrant\RestClientLib;
 
-use MikeBrant\RestClientLib\RestClient;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,8 +46,8 @@ function curl_error($curl) {
  * @return mixed
  */
 function curl_getinfo($curl) {
-    if (!is_null(RestClientTest::$curlGetInfoResponse)) {
-        return RestClientTest::$curlGetInfoResponse;
+    if (!is_null(RestClientTest::$curlGetinfoResponse)) {
+        return RestClientTest::$curlGetinfoResponse;
     }
     return \curl_getinfo($curl);
 }
@@ -58,7 +57,7 @@ class RestClientTest extends TestCase{
     
     protected $curlExecMockResponse = 'Test Response';
     
-    protected $curlGetInfoMockResponse = array(
+    protected $curlGetinfoMockResponse = array(
         'url' => 'http://google.com/',
         'content_type' => 'text/html; charset=UTF-8',
         'http_code' => 200,
@@ -94,13 +93,13 @@ class RestClientTest extends TestCase{
     
     public static $curlErrorResponse = null;
     
-    public static $curlGetInfoResponse = null;
+    public static $curlGetinfoResponse = null;
     
     protected function setUp() {
         self::$curlInitResponse = null;
         self::$curlExecResponse = null;
         self::$curlErrorResponse = null;
-        self::$curlGetInfoResponse = null;
+        self::$curlGetinfoResponse = null;
         $this->client = new RestClient();
     }
     
@@ -205,6 +204,13 @@ class RestClientTest extends TestCase{
                     'header2' => 'header2 value'
                 )
             )
+        );
+    }
+    
+    public function curlExecExceptionProvider() {
+        return array(
+            array(false, $this->curlGetinfoMockResponse),
+            array('test', array())
         );
     }
     
@@ -429,12 +435,14 @@ class RestClientTest extends TestCase{
     }
     
     /**
+     * @dataProvider curlExecExceptionProvider
      * @expectedException \Exception
      * @covers MikeBrant\RestClientLib\RestClient::curlExec
      */
-    public function testCurlExecThrowsException() {
-        self::$curlExecResponse = false;
+    public function testCurlExecThrowsException($response, $getinfo) {
+        self::$curlExecResponse = $response;
         self::$curlErrorResponse = 'test error';
+        self::$curlGetinfoResponse = $getinfo;
         $this->client->get('action');
     }
     
@@ -448,18 +456,12 @@ class RestClientTest extends TestCase{
      * @covers MikeBrant\RestClientLib\RestClient::curlInit
      * @covers MikeBrant\RestClientLib\RestClient::setRequestUrl
      * @covers MikeBrant\RestClientLib\RestClient::curlExec
-     * @covers MikeBrant\RestClientLib\RestClient::getRequestUrl
-     * @covers MikeBrant\RestClientLib\RestClient::getResponseInfo
-     * @covers MikeBrant\RestClientLib\RestClient::getRequestHeader
-     * @covers MikeBrant\RestClientLib\RestClient::getResponseCode
-     * @covers MikeBrant\RestClientLib\RestClient::getResponseBody
-     * @covers MikeBrant\RestClientLib\RestClient::getRequestData
      * @covers MikeBrant\RestClientLib\RestClient::curlTeardown
      * @covers MikeBrant\RestClientLib\RestClient::curlClose
      */
     public function testGet($useSsl, $host, $uriBase, $action, $expectedUrl) {
         self::$curlExecResponse = $this->curlExecMockResponse;
-        self::$curlGetInfoResponse = $this->curlGetInfoMockResponse;
+        self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
         $this->client->setBasicAuthCredentials('user', 'password')
                      ->setHeaders(array('header' => 'header value'))
                      ->setUseSsl($useSsl)
@@ -467,15 +469,10 @@ class RestClientTest extends TestCase{
                      ->setFollowRedirects(true)
                      ->setMaxRedirects(1)
                      ->setremoteHost($host)
-                     ->setUriBase($uriBase)
-                     ->get($action);
-        $this->assertEquals($expectedUrl, $this->client->getRequestUrl());
-        $this->assertEquals($this->curlGetInfoMockResponse, $this->client->getResponseInfo());
-        $this->assertEquals($this->curlGetInfoMockResponse['request_header'], $this->client->getRequestHeader());
-        $this->assertEquals($this->curlGetInfoMockResponse['http_code'], $this->client->getResponseCode());
-        $this->assertEquals($this->curlExecMockResponse, $this->client->getResponseBody());
+                     ->setUriBase($uriBase);
+        $response = $this->client->get($action);
+        $this->assertInstanceOf(CurlHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curl', $this->client);
-        $this->assertEquals(null, $this->client->getRequestData());
     }
     
     /**
@@ -485,13 +482,9 @@ class RestClientTest extends TestCase{
      */
     public function testPost() {
         self::$curlExecResponse = $this->curlExecMockResponse;
-        self::$curlGetInfoResponse = $this->curlGetInfoMockResponse;
-        $this->client->post('', 'test post data');
-        $this->assertEquals($this->curlGetInfoMockResponse, $this->client->getResponseInfo());
-        $this->assertEquals($this->curlGetInfoMockResponse['request_header'], $this->client->getRequestHeader());
-        $this->assertEquals($this->curlGetInfoMockResponse['http_code'], $this->client->getResponseCode());
-        $this->assertEquals($this->curlExecMockResponse, $this->client->getResponseBody());
-        $this->assertEquals('test post data', $this->client->getRequestData());
+        self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
+        $response = $this->client->post('', 'test post data');
+        $this->assertInstanceOf(CurlHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curl', $this->client);
    }
     
@@ -500,13 +493,9 @@ class RestClientTest extends TestCase{
      */
     public function testPut() {
         self::$curlExecResponse = $this->curlExecMockResponse;
-        self::$curlGetInfoResponse = $this->curlGetInfoMockResponse;
-        $this->client->put('', 'test put data');
-        $this->assertEquals($this->curlGetInfoMockResponse, $this->client->getResponseInfo());
-        $this->assertEquals($this->curlGetInfoMockResponse['request_header'], $this->client->getRequestHeader());
-        $this->assertEquals($this->curlGetInfoMockResponse['http_code'], $this->client->getResponseCode());
-        $this->assertEquals($this->curlExecMockResponse, $this->client->getResponseBody());
-        $this->assertEquals('test put data', $this->client->getRequestData());
+        self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
+        $response = $this->client->put('', 'test put data');
+        $this->assertInstanceOf(CurlHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curl', $this->client);
     }
     
@@ -515,26 +504,20 @@ class RestClientTest extends TestCase{
      */
     public function testDelete() {
         self::$curlExecResponse = $this->curlExecMockResponse;
-        self::$curlGetInfoResponse = $this->curlGetInfoMockResponse;
-        $this->client->delete('');
-        $this->assertEquals($this->curlGetInfoMockResponse, $this->client->getResponseInfo());
-        $this->assertEquals($this->curlGetInfoMockResponse['request_header'], $this->client->getRequestHeader());
-        $this->assertEquals($this->curlGetInfoMockResponse['http_code'], $this->client->getResponseCode());
-        $this->assertEquals($this->curlExecMockResponse, $this->client->getResponseBody());
+        self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
+        $response = $this->client->delete('');
+        $this->assertInstanceOf(CurlHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curl', $this->client);
     }
     
-        /**
+    /**
      * @covers MikeBrant\RestClientLib\RestClient::head
      */
     public function testHead() {
         self::$curlExecResponse = '';
-        self::$curlGetInfoResponse = $this->curlGetInfoMockResponse;
-        $this->client->head('');
-        $this->assertEquals($this->curlGetInfoMockResponse, $this->client->getResponseInfo());
-        $this->assertEquals($this->curlGetInfoMockResponse['request_header'], $this->client->getRequestHeader());
-        $this->assertEquals($this->curlGetInfoMockResponse['http_code'], $this->client->getResponseCode());
-        $this->assertEquals('', $this->client->getResponseBody());
+        self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
+        $response = $this->client->head('');
+        $this->assertInstanceOf(CurlHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curl', $this->client);
     }
 }

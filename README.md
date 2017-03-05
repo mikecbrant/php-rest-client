@@ -19,7 +19,7 @@ Requires:
 - PHP cURL extension
 - PHPUnit 5.7+ (for unit tests only)
 
-Tested via Travis CI against:
+This library is developed against PHP 7.1 and tested via Travis CI against:
 - PHP 5.6.*
 - PHP 7.0.*
 - PHP 7.1.*
@@ -33,16 +33,17 @@ This version represents a total re-factoring from previous versions of this libr
 **Usage example:**
 
 ```
+// instantiate and configure client
 $restClient = new RestClient();
-$restClient->setRemoteHost('foo.bar.com')                 [Host name must be set]
-    ->setUriBase('/some_service/')                        [Optional, default is '/']
-    ->setUseSsl(true)                                     [Optional, default is false]
-    ->setUseSslTestMode(false)                            [Optional, default is false]
-    ->setBasicAuthCredentials('username', 'password')     [Optional]
-    ->setHeaders(array('Accept' => 'application/json'))   [Optional, if not specified, default cURL headers for each request type will be used]
-    ->get('resource')                                     [Perform HTTP GET on URL [hostname].[uriBase].[resource parameter passed to method]]
-    ->post('resource', [data])                            [Perform HTTP POST on passed resource reference, data can be in form allowed by curl_setopt CURLOPT_POSTFIELDS]
-    ->put('resource', [data])                             [Perform HTTP PUT on passed resource reference, data can be in form allowed by curl_setopt CURLOPT_POSTFIELDS]
-    ->delete('resource');                                 [Perform HTTP DELETE on passed resource reference]
-    ->head('resource');                                   [Perform HTTP HEAD on passed resource reference]
+$restClient->setRemoteHost('foo.bar.com')
+    ->setUriBase('/some_service/')
+    ->setUseSsl(true)
+    ->setUseSslTestMode(false)
+    ->setBasicAuthCredentials('username', 'password')
+    ->setHeaders(array('Accept' => 'application/json'))
+$response = $restCLient->get('resource');
+$response = $restCLient->post('resource', [data]);
+$response = $restCLient->put('resource', [data]);
+$response = $restCLient->delete('resource');
+$response = $restCLient->head('resource');
 ```

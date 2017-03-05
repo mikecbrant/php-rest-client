@@ -104,35 +104,13 @@ class RestClient
      * 
      * @var string
      */
-    private $requestHeader = null;
     
     /**
-     * Variable to store the request data sent for POST/PUT requests. THis could be array, string, etc.
+     * Variable to store CurlHttpResponse result from curl call
      * 
-     * @var mixed
+     * @var CurlHttpResponse
      */
-    private $requestData = null;
-    
-    /**
-     * Variable to store response code
-     * 
-     * @var integer
-     */
-    private $responseCode = null;
-    
-    /**
-     * Variable to store curl response info array
-     * 
-     * @var array
-     */
-    private $responseInfo = null;
-    
-    /**
-     * Variable to store curl reponse body
-     * 
-     * @var string
-     */
-    private $responseBody = null;
+    private $response = null;
     
     /**
      * Constructor method. Currently no implementation.
@@ -145,7 +123,7 @@ class RestClient
      * Method to execute GET on server
      * 
      * @param string $action
-     * @return RestClient
+     * @return CurlHttpResponse
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
@@ -157,7 +135,7 @@ class RestClient
         // execute call. Can throw \Exception.
         $this->curlExec();
         
-        return $this;
+        return $this->response;
     }
     
     /**
@@ -165,7 +143,7 @@ class RestClient
      * 
      * @param mixed $action
      * @param mixed $data
-     * @return RestClient
+     * @return CurlHttpResponse
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
@@ -179,7 +157,7 @@ class RestClient
         // execute call. Can throw \Exception.
         $this->curlExec();
         
-        return $this;
+        return $this->response;
     }
     
     /**
@@ -187,7 +165,7 @@ class RestClient
      * 
      * @param string $action
      * @param mixed $data
-     * @return RestClient
+     * @return CurlHttpResponse
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
@@ -201,14 +179,14 @@ class RestClient
         // execute call. Can throw \Exception.
         $this->curlExec();
         
-        return $this;
+        return $this->response;
     }
     
     /**
      * Method to execute DELETE on server
      * 
      * @param string $action
-     * @return RestClient
+     * @return CurlHttpResponse
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
@@ -220,14 +198,14 @@ class RestClient
         // execute call. Can throw \Exception.
         $this->curlExec();
         
-        return $this;
+        return $this->response;
     }
     
     /**
      * Method to execute HEAD on server
      * 
      * @param string $action
-     * @return RestClient
+     * @return CurlHttpResponse
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
@@ -240,7 +218,7 @@ class RestClient
         // execute call. Can throw \Exception.
         $this->curlExec();
         
-        return $this;
+        return $this->response;
     }
     
     /**
@@ -491,60 +469,6 @@ class RestClient
     }
     
     /**
-     * Returns URL used for last request
-     * 
-     * @return string
-     */
-    public function getRequestUrl() {
-        return $this->requestUrl;
-    }
-    
-    /**
-     * Returns data sent with last request (i.e. POST/PUT data)
-     * 
-     * @return mixed
-     */
-    public function getRequestData() {
-        return $this->requestData;
-    }
-    
-    /**
-     * Returns request header for last request
-     * 
-     * @return string
-     */
-    public function getRequestHeader() {
-        return $this->requestHeader;
-    }
-    
-    /**
-     * Returns reespsone code for last request
-     * 
-     * @return integer
-     */
-    public function getResponseCode() {
-        return $this->responseCode;
-    }
-    
-    /**
-     * Returns curl response information array from last request
-     * 
-     * @return array
-     */
-    public function getResponseInfo() {
-        return $this->responseInfo;
-    }
-    
-    /**
-     * Returns response body from last request
-     * 
-     * @return string
-     */
-    public function getResponseBody() {
-        return $this->responseBody;
-    }
-    
-    /**
      * Method to initialize curl handle in object
      * 
      * @return void
@@ -645,12 +569,18 @@ class RestClient
             throw new \Exception('curl call failed with message: "' . $curlError. '"');
         }
         
-        // set object properties for request/response
-        $this->responseInfo = curl_getinfo($this->curl);
-        $this->requestHeader = $this->responseInfo['request_header'];
-        $this->responseCode = $this->responseInfo['http_code'];
-        $this->responseBody = $curlResult;
-        $this->curlTeardown();
+        // return CurlHttpResponse
+        try {
+            $this->response = new CurlHttpResponse($curlResult, curl_getinfo($this->curl));
+        } catch (\InvalidArgumentException $e) {
+            throw new \Exception(
+                'Unable to instantiate CurlHttpRepsonse. Message: "' . $e->getMessage() . '"',
+                $e->getCode(),
+                $e
+            );
+        } finally {
+            $this->curlTeardown();
+        }
     }
     
     /**
@@ -660,11 +590,7 @@ class RestClient
      */
     protected function resetRequestResponseProperties() {
         $this->requestUrl = null;
-        $this->requestHeader = null;
-        $this->requestData = null;
-        $this->responseCode = null;
-        $this->responseInfo = null;
-        $this->responseBody = null;
+        $this->response = null;
     }
     
     /**
