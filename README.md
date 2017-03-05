@@ -40,7 +40,8 @@ $restClient->setRemoteHost('foo.bar.com')
     ->setUseSsl(true)
     ->setUseSslTestMode(false)
     ->setBasicAuthCredentials('username', 'password')
-    ->setHeaders(array('Accept' => 'application/json'))
+    ->setHeaders(array('Accept' => 'application/json'));
+// make requests against service
 $response = $restCLient->get('resource');
 $response = $restCLient->post('resource', [data]);
 $response = $restCLient->put('resource', [data]);
