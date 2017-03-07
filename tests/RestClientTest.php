@@ -19,6 +19,7 @@ function curl_init() {
 /**
  * Mock for curl_exec global function
  * 
+ * @param resource curl handle
  * @return mixed
  */
 function curl_exec($curl) {
@@ -31,6 +32,7 @@ function curl_exec($curl) {
 /**
  * Mock for curl_error global function
  * 
+ * @param resource curl handle
  * @return mixed
  */
 function curl_error($curl) {
@@ -41,18 +43,36 @@ function curl_error($curl) {
 }
 
 /**
- * Mock for curl_getinfo function
- * 
- * @return mixed
+ * This is hacky workaround for avoiding double definition of this global method override
+ * when running full test suite on this library.
  */
-function curl_getinfo($curl) {
-    if (!is_null(RestClientTest::$curlGetinfoResponse)) {
-        return RestClientTest::$curlGetinfoResponse;
+if(!function_exists('\MikeBrant\RestClientLib\curl_getinfo')) {
+
+    /**
+     * Mock for curl_getinfo function
+     * 
+     * @param resource curl handle
+     * @return mixed
+     */
+    function curl_getinfo($curl) {
+        $backtrace = debug_backtrace();
+        $testClass = $backtrace[1]['class'] . 'Test';
+        if (!is_null($testClass::$curlGetinfoResponse)) {
+            return $testClass::$curlGetinfoResponse;
+        }
+        return \curl_getinfo($curl);
     }
-    return \curl_getinfo($curl);
 }
 
 class RestClientTest extends TestCase{
+    public static $curlInitResponse = null;
+    
+    public static $curlExecResponse = null;
+    
+    public static $curlErrorResponse = null;
+    
+    public static $curlGetinfoResponse = null;
+    
     protected $client = null;
     
     protected $curlExecMockResponse = 'Test Response';
@@ -86,14 +106,6 @@ class RestClientTest extends TestCase{
         'local_port' => 59733,
         'request_header' => "GET / HTTP/1.1\nHost: google.com\nAccept: */*",
     );
-    
-    public static $curlInitResponse = null;
-    
-    public static $curlExecResponse = null;
-    
-    public static $curlErrorResponse = null;
-    
-    public static $curlGetinfoResponse = null;
     
     protected function setUp() {
         self::$curlInitResponse = null;

@@ -113,7 +113,7 @@ class RestClient
     private $response = null;
     
     /**
-     * Constructor method. Currently no implementation.
+     * Constructor method. Currently there is no instantiation logic.
      *
      * @return void
      */
@@ -488,7 +488,7 @@ class RestClient
      * @return resource
      * @throws \Exception
      */
-    private function curlInit() {
+    protected function curlInit() {
         // initialize curl
         $curl = curl_init();
         if($curl === false) {
@@ -550,7 +550,7 @@ class RestClient
      * 
      * @return void
      */
-    private function curlClose($curl) {
+    protected function curlClose($curl) {
         curl_close($curl);
     }
     
@@ -574,7 +574,7 @@ class RestClient
             $this->response = new CurlHttpResponse($curlResult, curl_getinfo($this->curl));
         } catch (\InvalidArgumentException $e) {
             throw new \Exception(
-                'Unable to instantiate CurlHttpRepsonse. Message: "' . $e->getMessage() . '"',
+                'Unable to instantiate CurlHttpResponse. Message: "' . $e->getMessage() . '"',
                 $e->getCode(),
                 $e
             );
