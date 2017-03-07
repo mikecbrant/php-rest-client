@@ -268,7 +268,7 @@ class RestMultiClient extends RestClient
         
         // process the results. Note there could be individual errors on specific calls
         $this->curlMultiHttpResponse = new CurlMultiHttpResponse();
-        foreach($this->curlHandles as $i => $curl) {
+        foreach($this->curlHandles as $curl) {
             try {
                 $response = new CurlHttpResponse(
                     curl_multi_getcontent($curl),
@@ -293,7 +293,7 @@ class RestMultiClient extends RestClient
      * @return void
      */
     protected function resetRequestResponseProperties() {
-        $this->$curlMultiHttpResponse = null;
+        $this->curlMultiHttpResponse = null;
         $this->requestHeaders = array();
         $this->requestDataArray = array();
     }
@@ -320,9 +320,9 @@ class RestMultiClient extends RestClient
      */
     private function setRequestDataArray(array $data) {
         for ($i = 0; $i < count($data); $i++) {
-            $data = $data[$i];
-            $this->requestDataArray[$i] = $data;
-            curl_setopt($this->curlHandles[$i], CURLOPT_POSTFIELDS, $data);
+            $element = $data[$i];
+            $this->requestDataArray[$i] = $element;
+            curl_setopt($this->curlHandles[$i], CURLOPT_POSTFIELDS, $element);
         }
     }
     
