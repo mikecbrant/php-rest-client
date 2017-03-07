@@ -4,7 +4,8 @@ namespace MikeBrant\RestClientLib;
 
 use PHPUnit\Framework\TestCase;
 
-class CurlHttpResponseTest extends TestCase{
+class CurlHttpResponseTest extends TestCase
+{
     protected $curlExecMockResponse = 'Test Response';
     
     protected $curlGetinfoMockResponse = array(
