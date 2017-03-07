@@ -64,7 +64,8 @@ if(!function_exists('\MikeBrant\RestClientLib\curl_getinfo')) {
     }
 }
 
-class RestClientTest extends TestCase{
+class RestClientTest extends TestCase
+{
     public static $curlInitResponse = null;
     
     public static $curlExecResponse = null;
