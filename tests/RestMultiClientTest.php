@@ -66,7 +66,8 @@ if(!function_exists('\MikeBrant\RestClientLib\curl_getinfo')) {
     }
 }
 
-class RestMultiClientTest extends TestCase{
+class RestMultiClientTest extends TestCase
+{
     public static $curlMultiInitResponse = null;
     
     public static $curlMultiExecResponse = null;
