@@ -124,6 +124,18 @@ class RestMultiClientTest extends TestCase
         $this->client = null;
     }
     
+    public function notZeroOrPositiveIntegerProvider() {
+        return array(
+            array(-1),
+            array(null),
+            array(''),
+            array(new \stdClass()),
+            array(1.0),
+            array('1'),
+            array(array())
+        );
+    }
+    
     /**
      * @expectedException \InvalidArgumentException
      * @covers MikeBrant\RestClientLib\RestMultiClient::validateActionArray
@@ -230,8 +242,8 @@ class RestMultiClientTest extends TestCase
     
     /**
      * @covers MikeBrant\RestClientLib\RestMultiClient::post
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateData
-     * @covers MikeBrant\RestClientLib\RestMultiClient::setRequestData
+     * @covers MikeBrant\RestClientLib\RestMultiClient::validateDataArray
+     * @covers MikeBrant\RestClientLib\RestMultiClient::setRequestDataArray
      */
     public function testPost() {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
@@ -298,5 +310,23 @@ class RestMultiClientTest extends TestCase
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
+    }
+    
+    /**
+     * @dataProvider notZeroOrPositiveIntegerProvider
+     * @expectedException \InvalidArgumentException
+     * @covers MikeBrant\RestClientLib\RestMultiClient::setMaxHandles
+     */
+    public function testSetMaxHandlesThrowsException($maxHandles) {
+        $this->client->setMaxHandles($maxHandles);
+    }
+    
+    /**
+     * @covers MikeBrant\RestClientLib\RestMultiClient::setMaxHandles
+     * @covers MikeBrant\RestClientLib\RestMultiClient::getMaxHandles
+     */
+    public function testSetMaxHandles() {
+        $this->client->setMaxHandles(5);
+        $this->assertEquals(5, $this->client->getMaxHandles());
     }
 }
