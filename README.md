@@ -6,12 +6,12 @@
 
 This library provides classes implementing basic REST clients based on PHP's cURL extension.  Two client classes are made available:
 
-- **RestClient** - a class for executing RESTful service calls using a fluent interface.
-- **RestMultiClient** - a class which extends RestClient to provide curl_multi capabilities to allow for multiple REST calls to be made in parallel.
+- **RestClient** - a class for executing RESTful service calls.
+- **RestMultiClient** - a class which extends RestClient to provide curl_multi capabilities to allow multiple RESTful calls to be made in parallel.
 
-Additionally this library provides classes which wrap curl responses within object oriented interface:
-- **CurlHttpResponse** - a class which encapsulates curl response into class wrapper.
-- **CurlMultiHttpResponse** - a class which represents a collection of CurlHttpRepsonse objects as returned from multiple parallel REST calls.
+Additionally, this library provides classes which wrap curl responses within object oriented interface:
+- **CurlHttpResponse** - a class which encapsulates an HTTP response received via cURL into a class wrapper.
+- **CurlMultiHttpResponse** - a class which represents a collection of CurlHttpRepsonse objects as returned from multiple parallel cURL calls.
 
 These classes support:
 - HTTP actions - GET, POST, PUT, DELETE, and HEAD
@@ -38,10 +38,13 @@ This library is available as as mikecbrant/php-rest-client omposer package at ht
 **Usage example:**
 
 ```
-// For single requests:
+<?php
+
 use MikeBrant\RestClientLib;
 
-// instantiate and configure client
+/**
+ * Single request using RestClient
+ */
 $restClient = new RestClient();
 $restClient->setRemoteHost('foo.bar.com')
            ->setUriBase('/some_service/')
@@ -50,13 +53,15 @@ $restClient->setRemoteHost('foo.bar.com')
            ->setBasicAuthCredentials('username', 'password')
            ->setHeaders(array('Accept' => 'application/json'));
 // make requests against service
-$response = $restCLient->get('resource');
-$response = $restCLient->post('resource', $data);
-$response = $restCLient->put('resource', $data);
-$response = $restCLient->delete('resource');
-$response = $restCLient->head('resource');
+$response = $restClient->get('resource');
+$response = $restClient->post('resource', $data);
+$response = $restClient->put('resource', $data);
+$response = $restClient->delete('resource');
+$response = $restClient->head('resource');
 
-// For multiple parallel requests
+/**
+ * Multiple parallel requests using RestMultiClient
+ */
 $restMultiClient = new RestMultiClient();
 $restMultiClient->setRemoteHost('foo.bar.com')
                 ->setUriBase('/some_service/')
@@ -65,9 +70,9 @@ $restMultiClient->setRemoteHost('foo.bar.com')
                 ->setBasicAuthCredentials('username', 'password')
                 ->setHeaders(array('Accept' => 'application/json'));
 // make requests against service
-$responses = $restCLient->get(['resource1', 'resource2', ...]);
-$responses = $restCLient->post(['resource1', 'resource2', ...], [$data1, $data2, ...]);
-$responses = $restCLient->put(['resource1', 'resource2', ...], [$data1, $data2, ...]);
-$responses = $restCLient->delete(['resource1', 'resource2', ...]);
-$responses = $restCLient->head(['resource1', 'resource2', ...]);
+$responses = $restMultiClient->get(['resource1', 'resource2', ...]);
+$responses = $restMultiClient->post(['resource1', 'resource2', ...], [$data1, $data2, ...]);
+$responses = $restMultiClient->put(['resource1', 'resource2', ...], [$data1, $data2, ...]);
+$responses = $restMultiClient->delete(['resource1', 'resource2', ...]);
+$responses = $restMultiClient->head(['resource1', 'resource2', ...]);
 ```
