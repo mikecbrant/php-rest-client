@@ -241,6 +241,7 @@ class RestMultiClientTest extends TestCase
     
     /**
      * @covers MikeBrant\RestClientLib\RestMultiClient::post
+     * @covers MikeBrant\RestClientLib\RestMultiClient::validateInputArrays
      * @covers MikeBrant\RestClientLib\RestMultiClient::validateDataArray
      * @covers MikeBrant\RestClientLib\RestMultiClient::setRequestDataArray
      */
