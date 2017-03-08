@@ -86,13 +86,6 @@ class RestClient
     private $curl = null;
     
     /**
-     * Variable to store request URL that is formed before a request is made
-     * 
-     * @var string
-     */
-    private $requestUrl = null;
-    
-    /**
      * Array containing headers to be used for request
      * 
      * @var array
@@ -104,13 +97,6 @@ class RestClient
      * 
      * @var string
      */
-    
-    /**
-     * Variable to store CurlHttpResponse result from curl call
-     * 
-     * @var CurlHttpResponse
-     */
-    private $response = null;
     
     /**
      * Constructor method. Currently there is no instantiation logic.
@@ -133,9 +119,7 @@ class RestClient
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_HTTPGET, true);
         // execute call. Can throw \Exception.
-        $this->curlExec();
-        
-        return $this->response;
+        return $this->curlExec();
     }
     
     /**
@@ -155,9 +139,7 @@ class RestClient
         $this->setRequestData($data);
         curl_setopt($this->curl, CURLOPT_POST, true);
         // execute call. Can throw \Exception.
-        $this->curlExec();
-        
-        return $this->response;
+        return $this->curlExec();
     }
     
     /**
@@ -177,9 +159,7 @@ class RestClient
         $this->setRequestData($data);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
         // execute call. Can throw \Exception.
-        $this->curlExec();
-        
-        return $this->response;
+        return $this->curlExec();
     }
     
     /**
@@ -196,9 +176,7 @@ class RestClient
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
         // execute call. Can throw \Exception.
-        $this->curlExec();
-        
-        return $this->response;
+        return $this->curlExec();
     }
     
     /**
@@ -216,9 +194,7 @@ class RestClient
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
         curl_setopt($this->curl, CURLOPT_NOBODY, true);
         // execute call. Can throw \Exception.
-        $this->curlExec();
-        
-        return $this->response;
+        return $this->curlExec();
     }
     
     /**
@@ -469,21 +445,17 @@ class RestClient
     }
     
     /**
-     * Method to initialize curl handle in object
+     * Method to set up curl handle on client
      * 
      * @return void
      * @throws \Exception
      */
     private function curlSetup() {        
-        // reset all request/response properties
-        $this->resetRequestResponseProperties();
-        
-        // initialize curl. Throws \Exception on failure.
         $this->curl = $this->curlInit();
     }
     
     /**
-     * Method to initilize a curl handle
+     * Method to initilize and return a curl handle
      * 
      * @return resource
      * @throws \Exception
@@ -557,7 +529,7 @@ class RestClient
     /**
      * Method to execute curl call
      * 
-     * @return void
+     * @return CurlHttpResponse
      * @throws \Exception
      */
     private function curlExec() {
@@ -571,7 +543,7 @@ class RestClient
         
         // return CurlHttpResponse
         try {
-            $this->response = new CurlHttpResponse($curlResult, curl_getinfo($this->curl));
+            $response = new CurlHttpResponse($curlResult, curl_getinfo($this->curl));
         } catch (\InvalidArgumentException $e) {
             throw new \Exception(
                 'Unable to instantiate CurlHttpResponse. Message: "' . $e->getMessage() . '"',
@@ -581,16 +553,8 @@ class RestClient
         } finally {
             $this->curlTeardown();
         }
-    }
-    
-    /**
-     * Method to reset all properties specific to a particular request/response sequence.
-     * 
-     * @return void
-     */
-    protected function resetRequestResponseProperties() {
-        $this->requestUrl = null;
-        $this->response = null;
+        
+        return $response;
     }
     
     /**
@@ -601,7 +565,6 @@ class RestClient
      */
     protected function setRequestUrl($action) {
         $url = $this->buildUrl($action);
-        $this->requestUrl = $url;
         curl_setopt($this->curl, CURLOPT_URL, $url);
     }
     

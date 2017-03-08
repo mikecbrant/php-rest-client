@@ -4,10 +4,12 @@
 
 # php-rest-client
 
-This library provides classes to implement basic REST clients based on PHP's cURL extension.  Two client classes are made available:
+This library provides classes implementing basic REST clients based on PHP's cURL extension.  Two client classes are made available:
 
 - **RestClient** - a class for executing RESTful service calls using a fluent interface.
 - **RestMultiClient** - a class which extends RestClient to provide curl_multi capabilities to allow for multiple REST calls to be made in parallel.
+
+Additionally this library provides classes which wrap curl responses within object oriented interface:
 - **CurlHttpResponse** - a class which encapsulates curl response into class wrapper.
 - **CurlMultiHttpResponse** - a class which represents a collection of CurlHttpRepsonse objects as returned from multiple parallel REST calls.
 
@@ -31,7 +33,7 @@ This library is developed against PHP 7.1 and tested via Travis CI against:
 Please see Travis CI build status at: https://travis-ci.org/mikecbrant/php-rest-client
 Please see Code Climate code coverage and health informatoin at: https://codeclimate.com/github/mikecbrant/php-rest-client
 
-This version represents a total re-factoring from previous versions of this library, which were getting long in the tooth and were out of compliance with more modern PHP development standards (i.e. PSR) and tools (i.e. composer).
+This library is available as as mikecbrant/php-rest-client omposer package at https://packagist.org/packages/mikecbrant/php-rest-client
 
 **Usage example:**
 

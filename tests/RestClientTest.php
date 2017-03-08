@@ -465,7 +465,6 @@ class RestClientTest extends TestCase
      * @covers MikeBrant\RestClientLib\RestClient::validateAction
      * @covers MikeBrant\RestClientLib\RestClient::buildUrl
      * @covers MikeBrant\RestClientLib\RestClient::curlSetup
-     * @covers MikeBrant\RestClientLib\RestClient::resetRequestResponseProperties
      * @covers MikeBrant\RestClientLib\RestClient::curlInit
      * @covers MikeBrant\RestClientLib\RestClient::setRequestUrl
      * @covers MikeBrant\RestClientLib\RestClient::curlExec

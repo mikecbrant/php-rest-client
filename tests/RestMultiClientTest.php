@@ -212,7 +212,6 @@ class RestMultiClientTest extends TestCase
      * @covers MikeBrant\RestClientLib\RestMultiClient::get
      * @covers MikeBrant\RestClientLib\RestMultiClient::validateActionArray
      * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiSetup
-     * @covers MikeBrant\RestClientLib\RestMultiClient::resetRequestResponseProperties
      * @covers MikeBrant\RestClientLib\RestMultiClient::setRequestUrls
      * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
      * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiTeardown

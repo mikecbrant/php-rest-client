@@ -7,7 +7,7 @@ class CurlMultiHttpResponse
     /**
      * Variable to store individual CurlHttpResponse objects from curl_multi call
      * 
-     * @var array
+     * @var CurlHttpResponse[]
      */
     protected $curlHttpResponses = array();
     
@@ -29,7 +29,7 @@ class CurlMultiHttpResponse
     /**
      * Returns array of all CurlHttpResponse objects in collection.
      * 
-     * @return array
+     * @return CurlHttpResponse[]
      */
     public function getCurlHttpResponses() {
         return $this->curlHttpResponses;
@@ -38,7 +38,7 @@ class CurlMultiHttpResponse
     /**
      * Alias for getCurlHttpResponses
      * 
-     * @return array
+     * @return CurlHttpResponse[]
      */
     public function getAll() {
         return $this->getCurlHttpResponses();
@@ -47,7 +47,7 @@ class CurlMultiHttpResponse
     /**
      * Returns array of response bodies for each response in collection.
      * 
-     * @return array
+     * @return mixed[]
      */
     public function getResponseBodies() {
         return array_map(
@@ -61,7 +61,7 @@ class CurlMultiHttpResponse
     /**
      * Returns array of response codes for each response in collection.
      * 
-     * @return array
+     * @return integer[]
      */
     public function getHttpCodes() {
         return array_map(
@@ -75,7 +75,7 @@ class CurlMultiHttpResponse
     /**
      * Returns array of URL's used for each response in collectoin as returned via curl_getinfo.
      * 
-     * @return array
+     * @return string[]
      */
     public function getRequestUrls() {
         return array_map(
@@ -89,7 +89,7 @@ class CurlMultiHttpResponse
     /**
      * Returns array of request headers for each response in collection as returned via curl_getinfo.
      * 
-     * @return array
+     * @return string[]
      */
     public function getRequestHeaders() {
         return array_map(
@@ -104,7 +104,7 @@ class CurlMultiHttpResponse
      * Returns array of curl_getinfo arrays for each response in collection.
      * See documentation at http://php.net/manual/en/function.curl-getinfo.php for expected format for each array element.
      * 
-     * @return array
+     * @return array[]
      */
     public function getCurlGetinfoArrays() {
         return array_map(

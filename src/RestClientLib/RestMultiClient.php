@@ -10,14 +10,14 @@ class RestMultiClient extends RestClient
     /**
      * Store array of curl handles for multi_exec
      * 
-     * @var array
+     * @var resource[]
      */
     private $curlHandles = array();
     
     /**
-     * Stores curl multi handle to which individual handles in curlHandles are added
+     * Stores curl multi handle to which individual handles in curlHandles are added.
      * 
-     * @var mixed
+     * @var resource
      */
     private $curlMultiHandle = null;
     
@@ -29,27 +29,6 @@ class RestMultiClient extends RestClient
     private $maxHandles = 10;
     
     /**
-     * Variable to store an array of request headers sent in a multi_exec request
-     * 
-     * @var array
-     */
-    private $requestHeaders = array();
-    
-    /**
-     * Variable to store an array of request data sent for multi_exec POST/PUT requests.
-     * 
-     * @var array
-     */
-    private $requestDataArray = array();
-     
-    /**
-     * Variable to store CurlMultiHttpResponse object
-     * 
-     * @var CurlMultiHttpResponse
-     */
-    private $curlMultiHttpResponse = null;
-    
-    /**
      * Constructor method. Currently there is no instantiation logic.
      * 
      * @return void
@@ -59,9 +38,8 @@ class RestMultiClient extends RestClient
     /**
      * Method to perform multiple GET actions using curl_multi_exec.
      * 
-     * @param array $actions
-     * @param integer $maxHandles
-     * @return RestMultiClient
+     * @param string[] $actions
+     * @return CurlMultiHttpResponse
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \LengthException
@@ -75,17 +53,15 @@ class RestMultiClient extends RestClient
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET    
         }
-        $this->curlMultiExec();
-        
-        return $this->curlMultiHttpResponse;
+        return $this->curlMultiExec();
     }
     
     /**
      * Method to perform multiple POST actions using curl_multi_exec.
      * 
-     * @param array $actions
-     * @param array $data
-     * @return RestMultiClient
+     * @param string[] $actions
+     * @param mixed[] $data
+     * @return CurlMultiHttpResponse
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \LengthException
@@ -105,17 +81,15 @@ class RestMultiClient extends RestClient
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_POST, true); // explicitly set the method to POST 
         }
-        $this->curlMultiExec();
-        
-        return $this->curlMultiHttpResponse;
+        return $this->curlMultiExec();
     }
     
     /**
      * Method to perform multiple PUT actions using curl_multi_exec.
      * 
-     * @param array $actions
-     * @param array $data
-     * @return RestMultiClient
+     * @param string[] $actions
+     * @param mixed[] $data
+     * @return CurlMultiHttpResponse
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \LengthException
@@ -135,17 +109,15 @@ class RestMultiClient extends RestClient
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT'); // explicitly set the method to PUT 
         }
-        $this->curlMultiExec();
-        
-        return $this->curlMultiHttpResponse;
+        return $this->curlMultiExec();
     }
     
     /**
      * Method to perform multiple DELETE actions using curl_multi_exec.
      * 
-     * @param array $actions
+     * @param string[] $actions
      * @param integer $maxHandles
-     * @return RestMultiClient
+     * @return CurlMultiHttpResponse
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \LengthException
@@ -159,16 +131,14 @@ class RestMultiClient extends RestClient
         foreach($this->curlHandles as $curl) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); // explicitly set the method to DELETE
         }
-        $this->curlMultiExec();
-        
-        return $this->curlMultiHttpResponse;
+        return $this->curlMultiExec();
     }
     
     /**
      * Method to perform multiple HEAD actions using curl_multi_exec.
      * 
-     * @param array $actions
-     * @return RestMultiClient
+     * @param string[] $actions
+     * @return CurlMultiHttpResponse
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \LengthException
@@ -183,9 +153,7 @@ class RestMultiClient extends RestClient
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
             curl_setopt($curl, CURLOPT_NOBODY, true);
         }
-        $this->curlMultiExec();
-        
-        return $this->curlMultiHttpResponse;
+        return $this->curlMultiExec();
     }
     
     /**
@@ -201,7 +169,7 @@ class RestMultiClient extends RestClient
         }
         $this->maxHandles = $maxHandles;
         
-        return $this->curlMultiHttpResponse;
+        return $this;
     }
     
     /**
@@ -267,7 +235,7 @@ class RestMultiClient extends RestClient
         }
         
         // process the results. Note there could be individual errors on specific calls
-        $this->curlMultiHttpResponse = new CurlMultiHttpResponse();
+        $curlMultiHttpResponse = new CurlMultiHttpResponse();
         foreach($this->curlHandles as $curl) {
             try {
                 $response = new CurlHttpResponse(
@@ -282,32 +250,21 @@ class RestMultiClient extends RestClient
                    $e
                 );
             }
-            $this->curlMultiHttpResponse->addResponse($response);
+            $curlMultiHttpResponse->addResponse($response);
         }
         $this->curlMultiTeardown();
-    }
-    
-    /**
-     * Method to reset all properties specific to a particular request/response sequence.
-     * 
-     * @return void
-     */
-    protected function resetRequestResponseProperties() {
-        $this->curlMultiHttpResponse = null;
-        $this->requestHeaders = array();
-        $this->requestDataArray = array();
+        return $curlMultiHttpResponse;
     }
     
     /**
      * Method to set the urls for  multi_exec action
      * 
-     * @param array $actions
+     * @param string[] $actions
      * @return void
      */
     private function setRequestUrls(array $actions) {
         for ($i = 0; $i < count($actions); $i++) {
             $url = $this->buildUrl($actions[$i]);
-            $this->requestUrls[$i] = $url;
             curl_setopt($this->curlHandles[$i], CURLOPT_URL, $url);
         }   
     }
@@ -315,13 +272,12 @@ class RestMultiClient extends RestClient
     /**
      * Method to set array of data to be sent along with multi_exec POST/PUT requests
      * 
-     * @param array $data
+     * @param mixed[] $data
      * @return void
      */
     private function setRequestDataArray(array $data) {
         for ($i = 0; $i < count($data); $i++) {
             $element = $data[$i];
-            $this->requestDataArray[$i] = $element;
             curl_setopt($this->curlHandles[$i], CURLOPT_POSTFIELDS, $element);
         }
     }
@@ -329,7 +285,7 @@ class RestMultiClient extends RestClient
     /**
      * Method to provide common validation for action array parameters
      * 
-     * @param array $actions
+     * @param string[] $actions
      * @return void
      * @throws \InvalidArgumentException
      * @throws \LengthException
@@ -349,7 +305,7 @@ class RestMultiClient extends RestClient
     /**
      * Method to provide common validation for data array parameters
      * 
-     * @param array $data
+     * @param mixed[] $data
      * @return void
      * @throws \InvalidArgumentException
      * @throws \LengthException
