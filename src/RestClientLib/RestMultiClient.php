@@ -46,12 +46,10 @@ class RestMultiClient extends RestClient
      */
     public function get($actions) {
         $this->validateActionArray($actions);
-        
-        // set up curl handles
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         foreach($this->curlHandles as $curl) {
-            curl_setopt($curl, CURLOPT_HTTPGET, true); // explicitly set the method to GET    
+            curl_setopt($curl, CURLOPT_HTTPGET, true);
         }
         return $this->curlMultiExec();
     }
@@ -67,19 +65,12 @@ class RestMultiClient extends RestClient
      * @throws \LengthException
      */
     public function post($actions, $data) {
-        $this->validateActionArray($actions);
-        $this->validateDataArray($data);
-        // verify that the number of data elements matches the number of action elements
-        if (count($actions) !== count($data)) {
-            throw new \LengthException('The number of actions requested does not match the number of data elements provided.'); 
-        }
-        
-        // set up curl handles
+        $this->validateInputArrays($actions, $data);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         $this->setRequestDataArray($data);
         foreach($this->curlHandles as $curl) {
-            curl_setopt($curl, CURLOPT_POST, true); // explicitly set the method to POST 
+            curl_setopt($curl, CURLOPT_POST, true);
         }
         return $this->curlMultiExec();
     }
@@ -95,19 +86,12 @@ class RestMultiClient extends RestClient
      * @throws \LengthException
      */
     public function put($actions, $data) {
-        $this->validateActionArray($actions);
-        $this->validateDataArray($data);
-        // verify that the number of data elements matches the number of action elements
-        if (count($actions) !== count($data)) {
-            throw new \LengthException('The number of actions requested does not match the number of data elements provided.'); 
-        }
-        
-        // set up curl handles
+        $this->validateInputArrays($actions, $data);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         $this->setRequestDataArray($data);
         foreach($this->curlHandles as $curl) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT'); // explicitly set the method to PUT 
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
         }
         return $this->curlMultiExec();
     }
@@ -124,12 +108,10 @@ class RestMultiClient extends RestClient
      */
     public function delete($actions) {
         $this->validateActionArray($actions);
-        
-        // set up curl handles
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         foreach($this->curlHandles as $curl) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE'); // explicitly set the method to DELETE
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
         }
         return $this->curlMultiExec();
     }
@@ -145,8 +127,6 @@ class RestMultiClient extends RestClient
      */
     public function head($actions) {
         $this->validateActionArray($actions);
-        
-        // set up curl handles
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
         foreach($this->curlHandles as $curl) {
@@ -235,7 +215,7 @@ class RestMultiClient extends RestClient
         }
         
         // process the results. Note there could be individual errors on specific calls
-        $curlMultiHttpResponse = new CurlMultiHttpResponse();
+        $curlMultiResponse = new CurlMultiHttpResponse();
         foreach($this->curlHandles as $curl) {
             try {
                 $response = new CurlHttpResponse(
@@ -250,10 +230,10 @@ class RestMultiClient extends RestClient
                    $e
                 );
             }
-            $curlMultiHttpResponse->addResponse($response);
+            $curlMultiResponse->addResponse($response);
         }
         $this->curlMultiTeardown();
-        return $curlMultiHttpResponse;
+        return $curlMultiResponse;
     }
     
     /**
@@ -279,6 +259,23 @@ class RestMultiClient extends RestClient
         for ($i = 0; $i < count($data); $i++) {
             $element = $data[$i];
             curl_setopt($this->curlHandles[$i], CURLOPT_POSTFIELDS, $element);
+        }
+    }
+    
+    /**
+     * Method to provide validation to action and data arrays for POST/PUT methods
+     * 
+     * @param string[] $actions
+     * @param mixed[] $data
+     * @return void
+     * @throws \InvalidArgumentException
+     * @throws \LengthException
+     */
+    private function validateInputArrays(array $actions, array $data) {
+        $this->validateActionArray($actions);
+        $this->validateDataArray($data);
+        if (count($actions) !== count($data)) {
+            throw new \LengthException('The number of actions requested does not match the number of data elements provided.'); 
         }
     }
     

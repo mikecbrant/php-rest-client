@@ -118,7 +118,6 @@ class RestClient
         $this->curlSetup();
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_HTTPGET, true);
-        // execute call. Can throw \Exception.
         return $this->curlExec();
     }
     
@@ -138,7 +137,6 @@ class RestClient
         $this->setRequestUrl($action);
         $this->setRequestData($data);
         curl_setopt($this->curl, CURLOPT_POST, true);
-        // execute call. Can throw \Exception.
         return $this->curlExec();
     }
     
@@ -158,7 +156,6 @@ class RestClient
         $this->setRequestUrl($action);
         $this->setRequestData($data);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-        // execute call. Can throw \Exception.
         return $this->curlExec();
     }
     
@@ -175,7 +172,6 @@ class RestClient
         $this->curlSetup();
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        // execute call. Can throw \Exception.
         return $this->curlExec();
     }
     
@@ -193,7 +189,6 @@ class RestClient
         $this->setRequestUrl($action);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
         curl_setopt($this->curl, CURLOPT_NOBODY, true);
-        // execute call. Can throw \Exception.
         return $this->curlExec();
     }
     

@@ -8,9 +8,11 @@ engines:
     enabled: true
   phpmd:
     enabled: true
+      exclude_fingerprints:
+      - 22c29059ae6bb876ee678dfad3c26ec4
 ratings:
   paths:
-  - "**.php"
+    - "**.php"
 exclude_paths:
   - .settings/
   - build/

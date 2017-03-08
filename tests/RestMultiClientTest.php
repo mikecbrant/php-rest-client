@@ -176,6 +176,18 @@ class RestMultiClientTest extends TestCase
     }
     
     /**
+     * @expectedException \LengthException
+     * @covers MikeBrant\RestClientLib\RestMultiClient::validateInputArrays
+     */
+    public function testValidateInputArraysThrowsExceptionOnArraySizeMismatch() {
+        $maxHandles = $this->client->getMaxHandles();
+        $this->client->post(
+            array_fill(0, $maxHandles, 'action'),
+            array_fill(0, $maxHandles - 1, 'data')
+        );
+    }
+    
+    /**
      * @expectedException \Exception
      * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiSetup
      */
@@ -225,18 +237,6 @@ class RestMultiClientTest extends TestCase
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
         $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
-    }
-    
-    /**
-     * @expectedException \LengthException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::post
-     */
-    public function testPostThrowsExceptionOnArraySizeMismatch() {
-        $maxHandles = $this->client->getMaxHandles();
-        $this->client->post(
-            array_fill(0, $maxHandles, 'action'),
-            array_fill(0, $maxHandles - 1, 'data')
-        );
     }
     
     /**
