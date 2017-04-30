@@ -4,12 +4,26 @@ namespace MikeBrant\RestClientLib;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class CurlMultiHttpResponseTest
+ *
+ * @package MikeBrant\RestClientLib
+ */
 class CurlMultiHttpResponseTest extends TestCase
 {
+    /**
+     * @var CurlMultiHttpResponse
+     */
     protected $curlMultiHttpResponse = null;
-    
+
+    /**
+     * @var string
+     */
     protected $curlExecMockResponse = 'Test Response';
-    
+
+    /**
+     * @var array
+     */
     protected $curlGetinfoMockResponse = array(
         'url' => 'http://google.com/',
         'content_type' => 'text/html; charset=UTF-8',
@@ -39,121 +53,154 @@ class CurlMultiHttpResponseTest extends TestCase
         'local_port' => 59733,
         'request_header' => "GET / HTTP/1.1\nHost: google.com\nAccept: */*",
     );
-    
-    protected function setUp() {
+
+    /**
+     * Test setUp method
+     */
+    protected function setUp()
+    {
         $this->curlMultiHttpResponse = new CurlMultiHttpResponse();
     }
-    
-    public function curlHttpResponseProvider() {
-        return array(
-            array(
-                new CurlHttpResponse($this->curlExecMockResponse, $this->curlGetinfoMockResponse)
-            )
-        );
+
+    /**
+     * @return array
+     */
+    public function curlHttpResponseProvider()
+    {
+        return [
+            [new CurlHttpResponse(
+                $this->curlExecMockResponse,
+                $this->curlGetinfoMockResponse
+            )]
+        ];
     }
-    
+
     /**
      * @dataProvider curlHttpResponseProvider
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::addResponse
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getCurlHttpResponses
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getAll
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::addResponse
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getCurlHttpResponses
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getAll
      */
-    public function testAddResponse($curlHttpResponse) {
+    public function testAddResponse(CurlHttpResponse $curlHttpResponse)
+    {
         $responseArray = array_fill(0, 5, $curlHttpResponse);
         for ($i = 0; $i < count($responseArray); $i++) {
             $this->curlMultiHttpResponse->addResponse($curlHttpResponse);
         }
-        $this->assertEquals($responseArray, $this->curlMultiHttpResponse->getCurlHttpResponses());
+        $this->assertEquals(
+            $responseArray,
+            $this->curlMultiHttpResponse->getCurlHttpResponses()
+        );
         $this->assertEquals($responseArray, $this->curlMultiHttpResponse->getAll());
     }
-    
+
     /**
      * @dataProvider curlHttpResponseProvider
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getResponseBodies
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getResponseBodies
      */
-    public function testGetRepsonseBodies($curlHttpResponse) {
+    public function testGetResponseBodies(CurlHttpResponse $curlHttpResponse)
+    {
         $responseArray = array_fill(0, 5, $curlHttpResponse);
         for ($i = 0; $i < count($responseArray); $i++) {
             $this->curlMultiHttpResponse->addResponse($curlHttpResponse);
         }
         $responseBodies = array_map(
-            function($val) {
+            function(CurlHttpResponse $val) {
                 return $val->getBody();
             },
             $responseArray
         );
-        $this->assertEquals($responseBodies, $this->curlMultiHttpResponse->getResponseBodies());
+        $this->assertEquals(
+            $responseBodies,
+            $this->curlMultiHttpResponse->getResponseBodies()
+        );
     }
-    
+
     /**
      * @dataProvider curlHttpResponseProvider
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getHttpCodes
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getHttpCodes
      */
-    public function testgetHttpCodes($curlHttpResponse) {
+    public function testgetHttpCodes(CurlHttpResponse $curlHttpResponse)
+    {
         $responseArray = array_fill(0, 5, $curlHttpResponse);
         for ($i = 0; $i < count($responseArray); $i++) {
             $this->curlMultiHttpResponse->addResponse($curlHttpResponse);
         }
         $responseCodes = array_map(
-            function($val) {
+            function(CurlHttpResponse $val) {
                 return $val->getHttpCode();
             },
             $responseArray
         );
-        $this->assertEquals($responseCodes, $this->curlMultiHttpResponse->getHttpCodes());
+        $this->assertEquals(
+            $responseCodes,
+            $this->curlMultiHttpResponse->getHttpCodes()
+        );
     }
-    
+
     /**
      * @dataProvider curlHttpResponseProvider
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getRequestUrls
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getRequestUrls
      */
-    public function testGetRequestUrls($curlHttpResponse) {
+    public function testGetRequestUrls(CurlHttpResponse $curlHttpResponse)
+    {
         $responseArray = array_fill(0, 5, $curlHttpResponse);
         for ($i = 0; $i < count($responseArray); $i++) {
             $this->curlMultiHttpResponse->addResponse($curlHttpResponse);
         }
         $requestUrls = array_map(
-            function($val) {
+            function(CurlHttpResponse $val) {
                 return $val->getRequestUrl();
             },
             $responseArray
         );
-        $this->assertEquals($requestUrls, $this->curlMultiHttpResponse->getRequestUrls());
+        $this->assertEquals(
+            $requestUrls,
+            $this->curlMultiHttpResponse->getRequestUrls()
+        );
     }
-    
+
     /**
      * @dataProvider curlHttpResponseProvider
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getRequestHeaders
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getRequestHeaders
      */
-    public function testGetRequestHeaders($curlHttpResponse) {
+    public function testGetRequestHeaders(CurlHttpResponse $curlHttpResponse)
+    {
         $responseArray = array_fill(0, 5, $curlHttpResponse);
         for ($i = 0; $i < count($responseArray); $i++) {
             $this->curlMultiHttpResponse->addResponse($curlHttpResponse);
         }
         $requestHeaders = array_map(
-            function($val) {
+            function(CurlHttpResponse $val) {
                 return $val->getRequestHeader();
             },
             $responseArray
         );
-        $this->assertEquals($requestHeaders, $this->curlMultiHttpResponse->getRequestHeaders());
+        $this->assertEquals(
+            $requestHeaders,
+            $this->curlMultiHttpResponse->getRequestHeaders()
+        );
     }
-    
+
     /**
      * @dataProvider curlHttpResponseProvider
-     * @covers MikeBrant\RestClientLib\CurlMultiHttpResponse::getCurlGetinfoArrays
+     * @covers \MikeBrant\RestClientLib\CurlMultiHttpResponse::getCurlGetinfoArrays
      */
-    public function testGetCurlGetinfoArrays($curlHttpResponse) {
+    public function testGetCurlGetinfoArrays(CurlHttpResponse $curlHttpResponse)
+    {
         $responseArray = array_fill(0, 5, $curlHttpResponse);
         for ($i = 0; $i < count($responseArray); $i++) {
             $this->curlMultiHttpResponse->addResponse($curlHttpResponse);
         }
         $requestInfoArrays = array_map(
-            function($val) {
+            function(CurlHttpResponse $val) {
                 return $val->getCurlGetinfo();
             },
             $responseArray
         );
-        $this->assertEquals($requestInfoArrays, $this->curlMultiHttpResponse->getCurlGetinfoArrays());
+        $this->assertEquals(
+            $requestInfoArrays,
+            $this->curlMultiHttpResponse->getCurlGetinfoArrays()
+        );
     }
 }

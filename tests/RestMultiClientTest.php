@@ -9,7 +9,8 @@ use PHPUnit\Framework\TestCase;
  * 
  * @return mixed
  */
-function curl_multi_init() {
+function curl_multi_init()
+{
     if (!is_null(RestMultiClientTest::$curlMultiInitResponse)) {
         return RestMultiClientTest::$curlMultiInitResponse;
     }
@@ -23,7 +24,8 @@ function curl_multi_init() {
  * @param integer flag indicating if there are still active handles.
  * @return integer
  */
-function curl_multi_exec($multiCurl, &$active) {
+function curl_multi_exec($multiCurl, &$active)
+{
     if (is_null(RestMultiClientTest::$curlMultiExecResponse)) {
         return \curl_multi_exec($multiCurl, $active);
     }
@@ -37,7 +39,8 @@ function curl_multi_exec($multiCurl, &$active) {
  * @param resource curl handle
  * @return string
  */
-function curl_multi_getcontent($curl) {
+function curl_multi_getcontent($curl)
+{
     if (!is_null(RestMultiClientTest::$curlMultiGetcontentResponse)) {
         return RestMultiClientTest::$curlMultiGetcontentResponse;
     }
@@ -56,7 +59,8 @@ if(!function_exists('\MikeBrant\RestClientLib\curl_getinfo')) {
      * @param resource curl handle
      * @return mixed
      */
-    function curl_getinfo($curl) {
+    function curl_getinfo($curl)
+    {
         $backtrace = debug_backtrace();
         $testClass = $backtrace[1]['class'] . 'Test';
         if (!is_null($testClass::$curlGetinfoResponse)) {
@@ -66,23 +70,52 @@ if(!function_exists('\MikeBrant\RestClientLib\curl_getinfo')) {
     }
 }
 
+/**
+ * Class RestMultiClientTest
+ *
+ * @package MikeBrant\RestClientLib
+ */
 class RestMultiClientTest extends TestCase
 {
+    /**
+     * @var null
+     */
     public static $curlMultiInitResponse = null;
-    
+
+    /**
+     * @var null
+     */
     public static $curlMultiExecResponse = null;
-    
+
+    /**
+     * @var null
+     */
     public static $curlMultiGetcontentResponse = null;
-    
+
+    /**
+     * @var null
+     */
     public static $curlGetinfoResponse = null;
-    
+
+    /**
+     * @var RestMultiClient
+     */
     protected $client = null;
-    
+
+    /**
+     * @var int
+     */
     protected $curlMultiExecFailedResponse = CURLM_INTERNAL_ERROR;
-    
+
+    /**
+     * @var int
+     */
     protected $curlMultiExecCompleteResponse = CURLM_OK;
-    
-    protected $curlGetinfoMockResponse = array(
+
+    /**
+     * @var array
+     */
+    protected $curlGetinfoMockResponse = [
         'url' => 'http://google.com/',
         'content_type' => 'text/html; charset=UTF-8',
         'http_code' => 200,
@@ -105,50 +138,64 @@ class RestMultiClientTest extends TestCase
         'redirect_time' => 0,
         'redirect_url' => 'http://www.google.com/',
         'primary_ip' => '216.58.194.142',
-        'certinfo' => array(),
+        'certinfo' => [],
         'primary_port' => 80,
         'local_ip' => '192.168.1.74',
         'local_port' => 59733,
         'request_header' => "GET / HTTP/1.1\nHost: google.com\nAccept: */*",
-    );
-    
-    protected function setUp() {
+    ];
+
+    /**
+     * Test setUp method
+     */
+    protected function setUp()
+    {
         self::$curlMultiInitResponse = null;
         self::$curlMultiExecResponse = null;
         self::$curlMultiGetcontentResponse = null;
         self::$curlGetinfoResponse = null;
         $this->client = new RestMultiClient();
     }
-    
-    protected function tearDown() {
+
+    /**
+     * Test tearDown method
+     */
+    protected function tearDown()
+    {
         $this->client = null;
     }
-    
-    public function notZeroOrPositiveIntegerProvider() {
-        return array(
-            array(-1),
-            array(null),
-            array(''),
-            array(new \stdClass()),
-            array(1.0),
-            array('1'),
-            array(array())
-        );
+
+    /**
+     * @return array
+     */
+    public function notZeroOrPositiveIntegerProvider()
+    {
+        return [
+            [-1],
+            [null],
+            [''],
+            [new \stdClass()],
+            [1.0],
+            ['1'],
+            [[]]
+        ];
     }
     
     /**
      * @expectedException \InvalidArgumentException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateActionArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateActionArray
      */
-    public function testValidateActionArrayThrowsExceptionOnEmptyArray() {
-        $this->client->get(array());
+    public function testValidateActionArrayThrowsExceptionOnEmptyArray()
+    {
+        $this->client->get([]);
     }
     
     /**
      * @expectedException \LengthException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateActionArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateActionArray
      */
-    public function testValidateActionArrayThrowsExceptionOnOversizedArray() {
+    public function testValidateActionArrayThrowsExceptionOnOversizedArray()
+    {
         $maxHandles = $this->client->getMaxHandles();
         $this->client->get(
             array_fill(0, $maxHandles + 1, 'action')
@@ -157,17 +204,19 @@ class RestMultiClientTest extends TestCase
     
     /**
      * @expectedException \InvalidArgumentException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateDataArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateDataArray
      */
-    public function testValidateDataArrayThrowsExceptionOnEmptyArray() {
-        $this->client->get(array());
+    public function testValidateDataArrayThrowsExceptionOnEmptyArray()
+    {
+        $this->client->get([]);
     }
     
     /**
      * @expectedException \LengthException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateDataArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateDataArray
      */
-    public function testValidateDataArrayThrowsExceptionOnOversizedArray() {
+    public function testValidateDataArrayThrowsExceptionOnOversizedArray()
+    {
         $maxHandles = $this->client->getMaxHandles();
         $this->client->post(
             array_fill(0, $maxHandles, 'action'),
@@ -177,9 +226,10 @@ class RestMultiClientTest extends TestCase
     
     /**
      * @expectedException \LengthException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateInputArrays
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateInputArrays
      */
-    public function testValidateInputArraysThrowsExceptionOnArraySizeMismatch() {
+    public function testValidateInputArraysThrowsExceptionOnArraySizeMismatch()
+    {
         $maxHandles = $this->client->getMaxHandles();
         $this->client->post(
             array_fill(0, $maxHandles, 'action'),
@@ -189,9 +239,10 @@ class RestMultiClientTest extends TestCase
     
     /**
      * @expectedException \Exception
-     * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiSetup
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::curlMultiSetup
      */
-    public function testCurlMultiSetupThrowsExceptionOnCurlMultiInitFailure() {
+    public function testCurlMultiSetupThrowsExceptionOnCurlMultiInitFailure()
+    {
         self::$curlMultiInitResponse = false;
         $this->client->get(
             array_fill(0, 2, 'action')
@@ -199,9 +250,10 @@ class RestMultiClientTest extends TestCase
     }
     /**
      * @expectedException \Exception
-     * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
      */
-    public function testCurlMultiExecThrowsExceptionOnMultiCurlFailure() {
+    public function testCurlMultiExecThrowsExceptionOnMultiCurlFailure()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecFailedResponse;
         $this->client->get(
             array_fill(0, 2, 'action')
@@ -210,25 +262,27 @@ class RestMultiClientTest extends TestCase
     
     /**
      * @expectedException \Exception
-     * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
      */
-    public function testCurlMultiExecThrowsExceptionOnMalformedCurlHttpResponse() {
+    public function testCurlMultiExecThrowsExceptionOnMalformedCurlHttpResponse()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
         self::$curlMultiGetcontentResponse = 'test';
-        self::$curlGetinfoResponse = array();
+        self::$curlGetinfoResponse = [];
         $this->client->get(
             array_fill(0, 2, 'action')
         );
     }
     /**
-     * @covers MikeBrant\RestClientLib\RestMultiClient::get
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateActionArray
-     * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiSetup
-     * @covers MikeBrant\RestClientLib\RestMultiClient::setRequestUrls
-     * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
-     * @covers MikeBrant\RestClientLib\RestMultiClient::curlMultiTeardown
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::get
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateActionArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::curlMultiSetup
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::setRequestUrls
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::curlMultiExec
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::curlMultiTeardown
      */
-    public function testGet() {
+    public function testGet()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
         self::$curlMultiGetcontentResponse = 'test';
         self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
@@ -236,16 +290,21 @@ class RestMultiClientTest extends TestCase
             array_fill(0, 2, 'action')
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
-        $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
+        $this->assertAttributeEquals(
+            null,
+            'curlMultiHandle',
+            $this->client
+        );
     }
     
     /**
-     * @covers MikeBrant\RestClientLib\RestMultiClient::post
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateInputArrays
-     * @covers MikeBrant\RestClientLib\RestMultiClient::validateDataArray
-     * @covers MikeBrant\RestClientLib\RestMultiClient::setRequestDataArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::post
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateInputArrays
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::validateDataArray
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::setRequestDataArray
      */
-    public function testPost() {
+    public function testPost()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
         self::$curlMultiGetcontentResponse = 'test';
         self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
@@ -254,14 +313,19 @@ class RestMultiClientTest extends TestCase
             array_fill(0, 2, 'data')
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
-        $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
+        $this->assertAttributeEquals(
+            null,
+            'curlMultiHandle',
+            $this->client
+        );
    }
     
     /**
      * @expectedException \LengthException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::put
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::put
      */
-    public function testPutThrowsExceptionOnArraySizeMismatch() {
+    public function testPutThrowsExceptionOnArraySizeMismatch()
+    {
         $maxHandles = $this->client->getMaxHandles();
         $this->client->put(
             array_fill(0, $maxHandles, 'action'),
@@ -270,9 +334,10 @@ class RestMultiClientTest extends TestCase
     }
     
     /**
-     * @covers MikeBrant\RestClientLib\RestMultiClient::put
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::put
      */
-    public function testPut() {
+    public function testPut()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
         self::$curlMultiGetcontentResponse = 'test';
         self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
@@ -281,13 +346,18 @@ class RestMultiClientTest extends TestCase
             array_fill(0, 2, 'data')
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
-        $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
+        $this->assertAttributeEquals(
+            null,
+            'curlMultiHandle',
+            $this->client
+        );
     }
     
     /**
-     * @covers MikeBrant\RestClientLib\RestMultiClient::delete
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::delete
      */
-    public function testDelete() {
+    public function testDelete()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
         self::$curlMultiGetcontentResponse = 'test';
         self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
@@ -295,13 +365,18 @@ class RestMultiClientTest extends TestCase
             array_fill(0, 2, 'action')
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
-        $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
+        $this->assertAttributeEquals(
+            null,
+            'curlMultiHandle',
+            $this->client
+        );
     }
     
     /**
-     * @covers MikeBrant\RestClientLib\RestMultiClient::head
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::head
      */
-    public function testHead() {
+    public function testHead()
+    {
         self::$curlMultiExecResponse = $this->curlMultiExecCompleteResponse;
         self::$curlMultiGetcontentResponse = 'test';
         self::$curlGetinfoResponse = $this->curlGetinfoMockResponse;
@@ -309,23 +384,29 @@ class RestMultiClientTest extends TestCase
             array_fill(0, 2, 'action')
         );
         $this->assertInstanceOf(CurlMultiHttpResponse::class, $response);
-        $this->assertAttributeEquals(null, 'curlMultiHandle', $this->client);
+        $this->assertAttributeEquals(
+            null,
+            'curlMultiHandle',
+            $this->client
+        );
     }
     
     /**
      * @dataProvider notZeroOrPositiveIntegerProvider
      * @expectedException \InvalidArgumentException
-     * @covers MikeBrant\RestClientLib\RestMultiClient::setMaxHandles
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::setMaxHandles
      */
-    public function testSetMaxHandlesThrowsException($maxHandles) {
+    public function testSetMaxHandlesThrowsException($maxHandles)
+    {
         $this->client->setMaxHandles($maxHandles);
     }
     
     /**
-     * @covers MikeBrant\RestClientLib\RestMultiClient::setMaxHandles
-     * @covers MikeBrant\RestClientLib\RestMultiClient::getMaxHandles
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::setMaxHandles
+     * @covers \MikeBrant\RestClientLib\RestMultiClient::getMaxHandles
      */
-    public function testSetMaxHandles() {
+    public function testSetMaxHandles()
+    {
         $this->client->setMaxHandles(5);
         $this->assertEquals(5, $this->client->getMaxHandles());
     }

@@ -3,7 +3,11 @@
 namespace MikeBrant\RestClientLib;
 
 /**
- * @desc Class for executing RESTful service calls using a fluent interface.
+ * Class RestClient
+ *
+ * Class for executing RESTful service calls using a fluent interface.
+ *
+ * @package MikeBrant\RestClientLib
  */
 class RestClient
 {
@@ -113,7 +117,8 @@ class RestClient
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function get($action) {
+    public function get($action)
+    {
         $this->validateAction($action);
         $this->curlSetup();
         $this->setRequestUrl($action);
@@ -130,7 +135,8 @@ class RestClient
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function post($action, $data) {
+    public function post($action, $data)
+    {
         $this->validateAction($action);
         $this->validateData($data);
         $this->curlSetup();
@@ -149,7 +155,8 @@ class RestClient
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function put($action, $data) {
+    public function put($action, $data)
+    {
         $this->validateAction($action);
         $this->validateData($data);
         $this->curlSetup();
@@ -167,7 +174,8 @@ class RestClient
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function delete($action) {
+    public function delete($action)
+    {
         $this->validateAction($action);
         $this->curlSetup();
         $this->setRequestUrl($action);
@@ -183,7 +191,8 @@ class RestClient
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function head($action) {
+    public function head($action)
+    {
         $this->validateAction($action);
         $this->curlSetup();
         $this->setRequestUrl($action);
@@ -199,7 +208,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setRemoteHost($host) {
+    public function setRemoteHost($host)
+    {
         if(empty($host)) {
             throw new \InvalidArgumentException('Host name not provided.');
         } else if(!is_string($host)) {
@@ -243,7 +253,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setUriBase($uriBase) {
+    public function setUriBase($uriBase)
+    {
         if(empty($uriBase)) {
             throw new \InvalidArgumentException('URI base not provided.');
         } else if(!is_string($uriBase)) {
@@ -265,7 +276,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setUseSsl($value) {
+    public function setUseSsl($value)
+    {
         if (!is_bool($value)) {
             throw new \InvalidArgumentException('Non-boolean value passed as parameter.');
         }
@@ -281,7 +293,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setUseSslTestMode($value) {
+    public function setUseSslTestMode($value)
+    {
         if (!is_bool($value)) {
             throw new \InvalidArgumentException('Non-boolean value passed as parameter.');
         }
@@ -297,7 +310,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setBasicAuthCredentials($user, $password) {
+    public function setBasicAuthCredentials($user, $password)
+    {
         if (empty($user)) {
             throw new \InvalidArgumentException('User name not provided when trying to set basic authentication credentials.');
         }
@@ -318,7 +332,8 @@ class RestClient
      * @param array $headers
      * @return RestClient
      */
-    public function setHeaders(array $headers) {
+    public function setHeaders(array $headers)
+    {
         if(empty($headers)) {
             throw new \InvalidArgumentException('Empty array passed when triyng to set headers');
         }
@@ -334,7 +349,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setTimeout($seconds) {
+    public function setTimeout($seconds)
+    {
         if(!is_integer($seconds) || $seconds < 0) {
             throw new \InvalidArgumentException('A non-negative integer value must be passed when trying to set timeout');
         }
@@ -350,7 +366,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setFollowRedirects($follow) {
+    public function setFollowRedirects($follow)
+    {
         if(!is_bool($follow)) {
             throw new \InvalidArgumentException('Non-boolean value passed as parameter.');
         }
@@ -366,7 +383,8 @@ class RestClient
      * @return RestClient
      * @throws \InvalidArgumentException
      */
-    public function setMaxRedirects($redirects) {
+    public function setMaxRedirects($redirects)
+    {
         if(!is_integer($redirects) || $redirects < 0) {
             throw new \InvalidArgumentException('A non-negative integer value must be passed when trying to set max redirects.');
         }
@@ -381,7 +399,8 @@ class RestClient
      * 
      * @return string
      */
-    public function getRemoteHost() {
+    public function getRemoteHost()
+    {
         return $this->remoteHost;
     }
     
@@ -390,7 +409,8 @@ class RestClient
      * 
      * @return string
      */
-    public function getUriBase() {
+    public function getUriBase()
+    {
         return $this->uriBase;
     }
     
@@ -399,7 +419,8 @@ class RestClient
      * 
      * @return boolean
      */
-    public function isUsingSsl() {
+    public function isUsingSsl()
+    {
         return $this->useSsl;
     }
     
@@ -408,7 +429,8 @@ class RestClient
      * 
      * @return boolean
      */
-    public function isUsingSslTestMode() {
+    public function isUsingSslTestMode()
+    {
         return $this->useSslTestMode;
     }
     
@@ -417,7 +439,8 @@ class RestClient
      * 
      * @return integer
      */
-    public function getTimeout() {
+    public function getTimeout()
+    {
         return $this->timeout;
     }
     
@@ -426,7 +449,8 @@ class RestClient
      * 
      * @return boolean
      */
-    public function isFollowingRedirects() {
+    public function isFollowingRedirects()
+    {
         return $this->followRedirects;
     }
     
@@ -435,7 +459,8 @@ class RestClient
      * 
      * @return integer
      */
-    public function getMaxRedirects() {
+    public function getMaxRedirects()
+    {
         return $this->maxRedirects;
     }
     
@@ -445,7 +470,8 @@ class RestClient
      * @return void
      * @throws \Exception
      */
-    private function curlSetup() {        
+    private function curlSetup()
+    {
         $this->curl = $this->curlInit();
     }
     
@@ -455,7 +481,8 @@ class RestClient
      * @return resource
      * @throws \Exception
      */
-    protected function curlInit() {
+    protected function curlInit()
+    {
         // initialize curl
         $curl = curl_init();
         if($curl === false) {
@@ -507,17 +534,20 @@ class RestClient
      * 
      * @return void
      */
-    private function curlTeardown() {
+    private function curlTeardown()
+    {
         $this->curlClose($this->curl);
         $this->curl = null;
     }
     
     /**
      * Method to close curl handle
-     * 
+     *
+     * @param resource $curl curl handle
      * @return void
      */
-    protected function curlClose($curl) {
+    protected function curlClose($curl)
+    {
         curl_close($curl);
     }
     
@@ -527,7 +557,8 @@ class RestClient
      * @return CurlHttpResponse
      * @throws \Exception
      */
-    private function curlExec() {
+    private function curlExec()
+    {
         $curlResult = curl_exec($this->curl);
         if($curlResult === false) {
             // our curl call failed for some reason
@@ -558,7 +589,8 @@ class RestClient
      * @param string $action
      * @return void
      */
-    protected function setRequestUrl($action) {
+    protected function setRequestUrl($action)
+    {
         $url = $this->buildUrl($action);
         curl_setopt($this->curl, CURLOPT_URL, $url);
     }
@@ -569,7 +601,8 @@ class RestClient
      * @param string $action
      * @return string
      */
-    protected function buildUrl($action) {
+    protected function buildUrl($action)
+    {
         $url = 'http://';
         if (true === $this->useSsl) {
             $url = 'https://';
@@ -584,8 +617,8 @@ class RestClient
      * @param mixed $data
      * @return void
      */
-    protected function setRequestData($data) {
-        $this->requestData = $data;
+    protected function setRequestData($data)
+    {
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $data);
     }
     
@@ -596,7 +629,8 @@ class RestClient
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected function validateAction($action) {
+    protected function validateAction($action)
+    {
         if(!is_string($action)) {
             throw new \InvalidArgumentException('A non-string value was passed for action parameter');
         }
@@ -609,7 +643,8 @@ class RestClient
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected function validateData($data) {
+    protected function validateData($data)
+    {
         if(empty($data)) {
             throw new \InvalidArgumentException('An empty value was passed for data parameter');
         }

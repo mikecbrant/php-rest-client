@@ -3,8 +3,12 @@
 namespace MikeBrant\RestClientLib;
 
 /**
-* @desc Class which extendd RestClient to provide curl_multi capabilities, allowing for multiple REST calls to be made in parallel.
-*/
+ * Class RestMultiClient
+ *
+ * Class which extendd RestClient to provide curl_multi capabilities, allowing for multiple REST calls to be made in parallel.
+ *
+ * @package MikeBrant\RestClientLib
+ */
 class RestMultiClient extends RestClient
 {
     /**
@@ -44,7 +48,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function get($actions) {
+    public function get($actions)
+    {
         $this->validateActionArray($actions);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
@@ -64,7 +69,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function post($actions, $data) {
+    public function post($actions, $data)
+    {
         $this->validateInputArrays($actions, $data);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
@@ -85,7 +91,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function put($actions, $data) {
+    public function put($actions, $data)
+    {
         $this->validateInputArrays($actions, $data);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
@@ -106,7 +113,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function delete($actions) {
+    public function delete($actions)
+    {
         $this->validateActionArray($actions);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
@@ -125,7 +133,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    public function head($actions) {
+    public function head($actions)
+    {
         $this->validateActionArray($actions);
         $this->curlMultiSetup(count($actions));
         $this->setRequestUrls($actions);
@@ -143,7 +152,8 @@ class RestMultiClient extends RestClient
      * @return RestMultiClient
      * @throws \InvalidArgumentException
      */
-    public function setMaxHandles($maxHandles) {
+    public function setMaxHandles($maxHandles)
+    {
         if (!is_integer($maxHandles) || $maxHandles <= 0) {
             throw new \InvalidArgumentException('A non-integer value was passed for max_handles parameter.');     
         }
@@ -157,7 +167,8 @@ class RestMultiClient extends RestClient
      * 
      * @return integer
      */
-    public function getMaxHandles() {
+    public function getMaxHandles()
+    {
         return $this->maxHandles;
     }
     
@@ -168,7 +179,8 @@ class RestMultiClient extends RestClient
      * @return void
      * @throws \Exception
      */
-    private function curlMultiSetup($handlesNeeded) {
+    private function curlMultiSetup($handlesNeeded)
+    {
         $multiCurl = curl_multi_init();
         if($multiCurl === false) {
             throw new \Exception('multi_curl handle failed to initialize.');
@@ -187,7 +199,8 @@ class RestMultiClient extends RestClient
      * 
      * @return void
      */
-    private function curlMultiTeardown() {
+    private function curlMultiTeardown()
+    {
         foreach ($this->curlHandles as $curl) {
             curl_multi_remove_handle($this->curlMultiHandle, $curl);
             $this->curlClose($curl);
@@ -200,10 +213,11 @@ class RestMultiClient extends RestClient
     /**
      * Method to execute curl_multi call
      * 
-     * @return void
+     * @return CurlMultiHttpResponse
      * @throws \Exception
      */
-    private function curlMultiExec() {
+    private function curlMultiExec()
+    {
         // start multi_exec execution
         do {
             $status = curl_multi_exec($this->curlMultiHandle, $active);
@@ -242,7 +256,8 @@ class RestMultiClient extends RestClient
      * @param string[] $actions
      * @return void
      */
-    private function setRequestUrls(array $actions) {
+    private function setRequestUrls(array $actions)
+    {
         for ($i = 0; $i < count($actions); $i++) {
             $url = $this->buildUrl($actions[$i]);
             curl_setopt($this->curlHandles[$i], CURLOPT_URL, $url);
@@ -255,7 +270,8 @@ class RestMultiClient extends RestClient
      * @param mixed[] $data
      * @return void
      */
-    private function setRequestDataArray(array $data) {
+    private function setRequestDataArray(array $data)
+    {
         for ($i = 0; $i < count($data); $i++) {
             $element = $data[$i];
             curl_setopt($this->curlHandles[$i], CURLOPT_POSTFIELDS, $element);
@@ -271,7 +287,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    private function validateInputArrays(array $actions, array $data) {
+    private function validateInputArrays(array $actions, array $data)
+    {
         $this->validateActionArray($actions);
         $this->validateDataArray($data);
         if (count($actions) !== count($data)) {
@@ -287,7 +304,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    private function validateActionArray(array $actions) {
+    private function validateActionArray(array $actions)
+    {
         if(empty($actions)) {
             throw new \InvalidArgumentException('An empty array was passed for actions parameter.');
         }
@@ -307,7 +325,8 @@ class RestMultiClient extends RestClient
      * @throws \InvalidArgumentException
      * @throws \LengthException
      */
-    private function validateDataArray(array $data) {
+    private function validateDataArray(array $data)
+    {
         if(empty($data)) {
             throw new \InvalidArgumentException('An empty array was passed for data parameter');
         }

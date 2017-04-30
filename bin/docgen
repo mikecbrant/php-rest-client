@@ -1,0 +1,4 @@
+#!/bin/bash
+# Simple script to run phpdocumentor and phpdoc-md tools to generate markdown docs
+vendor/bin/phpdoc -d src/RestClientLib -t docs/phpdocs --template=xml
+vendor/bin/phpdocmd --index RestClientLib.md docs/phpdocs/structure.xml docs

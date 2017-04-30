@@ -2,6 +2,14 @@
 
 namespace MikeBrant\RestClientLib;
 
+/**
+ * Class CurlMultiHttpResponse
+ *
+ * Class representing a collection of HTTP responses as returned from
+ * multiple parallel curl calls.
+ *
+ * @package MikeBrant\RestClientLib
+ */
 class CurlMultiHttpResponse
 {
     /**
@@ -22,7 +30,8 @@ class CurlMultiHttpResponse
      * @param CurlHttpResponse $response
      * @return void
      */
-    public function addResponse(CurlHttpResponse $response) {
+    public function addResponse(CurlHttpResponse $response)
+    {
         $this->curlHttpResponses[] = $response;
     }
     
@@ -31,7 +40,8 @@ class CurlMultiHttpResponse
      * 
      * @return CurlHttpResponse[]
      */
-    public function getCurlHttpResponses() {
+    public function getCurlHttpResponses()
+    {
         return $this->curlHttpResponses;
     }
     
@@ -40,7 +50,8 @@ class CurlMultiHttpResponse
      * 
      * @return CurlHttpResponse[]
      */
-    public function getAll() {
+    public function getAll()
+    {
         return $this->getCurlHttpResponses();
     }
     
@@ -49,7 +60,8 @@ class CurlMultiHttpResponse
      * 
      * @return mixed[]
      */
-    public function getResponseBodies() {
+    public function getResponseBodies()
+    {
         return array_map(
             function(CurlHttpResponse $value) {
                 return $value->getBody();
@@ -63,7 +75,8 @@ class CurlMultiHttpResponse
      * 
      * @return integer[]
      */
-    public function getHttpCodes() {
+    public function getHttpCodes()
+    {
         return array_map(
             function(CurlHttpResponse $value) {
                 return $value->getHttpCode();
@@ -77,7 +90,8 @@ class CurlMultiHttpResponse
      * 
      * @return string[]
      */
-    public function getRequestUrls() {
+    public function getRequestUrls()
+    {
         return array_map(
             function(CurlHttpResponse $value) {
                 return $value->getRequestUrl();
@@ -91,7 +105,8 @@ class CurlMultiHttpResponse
      * 
      * @return string[]
      */
-    public function getRequestHeaders() {
+    public function getRequestHeaders()
+    {
         return array_map(
             function(CurlHttpResponse $value) {
                 return $value->getRequestHeader();
@@ -106,7 +121,8 @@ class CurlMultiHttpResponse
      * 
      * @return array[]
      */
-    public function getCurlGetinfoArrays() {
+    public function getCurlGetinfoArrays()
+    {
         return array_map(
             function(CurlHttpResponse $value) {
                 return $value->getCurlGetinfo();

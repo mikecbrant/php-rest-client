@@ -6,12 +6,15 @@
 
 This library provides classes implementing basic REST clients based on PHP's cURL extension.  Two client classes are made available:
 
-- **RestClient** - a class for executing RESTful service calls.
-- **RestMultiClient** - a class which extends RestClient to provide curl_multi capabilities to allow multiple RESTful calls to be made in parallel.
+- [RestClient](docs/MikeBrant-RestClientLib-RestClient.md) - a class for executing RESTful service calls.
+- [RestMultiClient](docs/MikeBrant-RestClientLib-RestMultiClient.md) - a class which extends RestClient to provide 
+curl_multi capabilities to allow multiple RESTful calls to be made in parallel.
 
 Additionally, this library provides classes which wrap curl responses within object oriented interface:
-- **CurlHttpResponse** - a class which encapsulates an HTTP response received via cURL into a class wrapper.
-- **CurlMultiHttpResponse** - a class which represents a collection of CurlHttpRepsonse objects as returned from multiple parallel cURL calls.
+- [CurlHttpResponse](docs/MikeBrant-RestClientLib-CurlHttpResponse.md) - a class which encapsulates an HTTP response 
+received via cURL into a class wrapper.
+- [CurlMultiHttpResponse](docs/MikeBrant-RestClientLib-CurlMultiHttpResponse.md) - a class which represents a collection of 
+CurlHttpRepsonse objects as returned from multiple parallel cURL calls.
 
 These classes support:
 - HTTP actions - GET, POST, PUT, DELETE, and HEAD
@@ -30,10 +33,13 @@ This library is developed against PHP 7.1 and tested via Travis CI against:
 - PHP Nightly build
 - PHP HHVM (HipHop)
 
-Please see Travis CI build status at: https://travis-ci.org/mikecbrant/php-rest-client
-Please see Code Climate code coverage and health informatoin at: https://codeclimate.com/github/mikecbrant/php-rest-client
+[Full library documentation](/docs/RestClientLib.md)
 
-This library is available as as mikecbrant/php-rest-client omposer package at https://packagist.org/packages/mikecbrant/php-rest-client
+[Travis CI build status](https://travis-ci.org/mikecbrant/php-rest-client)
+
+[Code Climate code coverage and health information](https://codeclimate.com/github/mikecbrant/php-rest-client)
+
+[Packagist page](https://packagist.org/packages/mikecbrant/php-rest-client)
 
 **Usage example:**
 

@@ -3,12 +3,18 @@
 namespace MikeBrant\RestClientLib;
 
 /**
- * @desc Class representing HTTP response as returned from curl call.
+ * Class CurlHttpResponse
+ *
+ * Class representing HTTP response as returned from curl call.
+ *
+ * @package MikeBrant\RestClientLib
  */
 class CurlHttpResponse
 {
     /**
      * Variable to store response body
+     *
+     * @var mixed
      */
     protected $body = null;
     
@@ -47,16 +53,16 @@ class CurlHttpResponse
      * @var array
      */
     protected $curlGetinfo = null;
-    
+
     /**
      * Constructor method.
-     * 
+     *
      * @param mixed $responseBody Response body as returned from a curl request.
-     * @param array $curlGetinto Array returned form curl_getinfo() function call for request.
-     * @return void
+     * @param array $curlGetinfo Array returned form curl_getinfo() function call for request.
      * @throws \InvalidArgumentException
      */
-    public function __construct($responseBody, array $curlGetinfo) {
+    public function __construct($responseBody, array $curlGetinfo)
+    {
         $this->validateGetinfoArray($curlGetinfo);
         $this->body = $responseBody;
         $this->httpCode = $curlGetinfo['http_code'];
@@ -71,7 +77,8 @@ class CurlHttpResponse
      * 
      * @return mixed
      */
-    public function getBody() {
+    public function getBody()
+    {
         return $this->body;
     }
     
@@ -80,7 +87,8 @@ class CurlHttpResponse
      * 
      * @return integer
      */
-    public function getHttpCode() {
+    public function getHttpCode()
+    {
         return $this->httpCode;
     }
     
@@ -89,7 +97,8 @@ class CurlHttpResponse
      * 
      * @return string
      */
-    public function getRequestUrl() {
+    public function getRequestUrl()
+    {
         return $this->requestUrl;
     }
     
@@ -98,7 +107,8 @@ class CurlHttpResponse
      * 
      * @return string
      */
-    public function getRequestHeader() {
+    public function getRequestHeader()
+    {
         return $this->requestHeader;
     }
     
@@ -108,17 +118,20 @@ class CurlHttpResponse
      * 
      * @return array
      */
-    public function getCurlGetinfo() {
+    public function getCurlGetinfo()
+    {
         return $this->curlGetinfo;
     }
     
     /**
      * Method to perform minimal validation of input array as having keys expected to be returned from
      * curl_getinfo().
-     * 
+     *
+     * @param array $getinfo Array as returned from curl_getinfo()
      * @throws \InvalidArgumentException
      */
-    protected function validateGetinfoArray(array $getinfo) {
+    protected function validateGetinfoArray(array $getinfo)
+    {
         if(empty($getinfo)) {
             throw new \InvalidArgumentException('Empty array passed. Valid curl_getinfo() result array expected.');
         }
