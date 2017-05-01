@@ -33,6 +33,7 @@ This library is developed against PHP 7.1 and tested via Travis CI against:
 - PHP Nightly build
 - PHP HHVM (HipHop)
 
+<<<<<<< HEAD
 [Full library documentation](/docs/RestClientLib.md)
 
 [Travis CI build status](https://travis-ci.org/mikecbrant/php-rest-client)
@@ -40,6 +41,12 @@ This library is developed against PHP 7.1 and tested via Travis CI against:
 [Code Climate code coverage and health information](https://codeclimate.com/github/mikecbrant/php-rest-client)
 
 [Packagist page](https://packagist.org/packages/mikecbrant/php-rest-client)
+=======
+Please see Travis CI build status at: https://travis-ci.org/mikecbrant/php-rest-client
+Please see Code Climate code coverage and health information at: https://codeclimate.com/github/mikecbrant/php-rest-client
+
+This library is available as composer package 'mikecbrant/php-rest-client'. The Packagist link is https://packagist.org/packages/mikecbrant/php-rest-client
+>>>>>>> origin/master
 
 **Usage example:**
 
