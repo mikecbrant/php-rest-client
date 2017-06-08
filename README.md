@@ -31,7 +31,6 @@ This library is developed against PHP 7.1 and tested via Travis CI against:
 - PHP 7.0.*
 - PHP 7.1.*
 - PHP Nightly build
-- PHP HHVM (HipHop)
 
 [Full library documentation](/docs/RestClientLib.md)
 
